@@ -128,3 +128,42 @@ pnpm wrangler d1 execute certain-db --remote --file=./schema.sql
 # 本番デプロイ
 pnpm run deploy
 ```
+
+## ORM
+
+### 1. drizzle関係のインストール
+```
+pnpm add drizzle-orm
+pnpm add -D drizzle-kit
+```
+
+### 2. drizzle関係のファイル設定
+
+- `drizzle.config.ts`
+- `worker/db/schema.ts`
+
+### 3. SQLファイルの生成
+`pnpm drizzle-kit generate`
+
+マイグレーション結果はignoreしないことで再現性を保証
+
+### 4. 本番用データベース(D1)の作成
+`pnpm wrangler d1 create certain-db`
+
+### 5. wranglerの設定にdbのID追加
+`database_id`を`wrangler.jsonc`に追記
+
+### 6. 本番用DBに流す
+`pnpm wrangler d1 migrations apply certain-db --remote`
+
+### 7. ローカルDBの作成
+`pnpm wrangler d1 create certain-db --local --file=./worker/migrations/0000_xxxx.sql`
+
+### 8. ローカルDBに流す
+`pnpm wrangler d1 execute certain-db --local --file=./worker/migrations/0000_xxxx.sql`∂
+
+参考: 
+- [drizzle公式](https://orm.drizzle.team/docs/connect-cloudflare-d1)
+- [Drizzleスキーマ](https://orm.drizzle.team/docs/sql-schema-declaration)
+- [Cloudflare D1公式](https://developers.cloudflare.com/d1/get-started/)
+- [Drizzleを使ったセットアップ事例](https://qiita.com/sigeta/items/99a625c17c6a0a75da54)
