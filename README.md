@@ -100,6 +100,34 @@ mainブランチにマージするだけでデプロイ
 
 ## プレビュー画面（マージ前確認用）
 
+### CLIで設定(ブランチとかを切らずに好きなタイミングで)
+
+`workers_dev`がEnabledなら利用可能, 閲覧可能な人をポリシーから設定
+
+`pnpm wrangler versions upload`
+
+URLを固定したいなら、`pnpm wrangler versions upload --preview-alias staging`
+
+参考: https://developers.cloudflare.com/workers/configuration/previews/
+
+### `wrangler.jsonc`に実装(GitHub未連携, 別Workerの作成)
+```
+{
+  "env": {
+    "preview": {
+      "name": "certain-preview",  // 別のWorker名
+      "d1_databases": [
+        {
+          "binding": "certain_db",
+          "database_name": "certain-db",
+          "database_id": "id"
+        }
+      ]
+    }
+  }
+}
+```
+
 ## データベース(本番用, 開発用, テスト用)
 
 jsoncに登録するのも忘れず
