@@ -156,16 +156,13 @@ pnpm add -D drizzle-kit
 `For local dev, do you want to connect to the remote resource instead of a local resource?`はNoに(ローカルで誤ってリモートを消しうる可能性)
 
 ### 5. wranglerの設定にdbのID追加
-`database_id`を`wrangler.jsonc`に追記
+`database_id`を`wrangler.jsonc`に追記(自動でやってくれることも)
 
 ### 6. 本番用DBに流す
 `pnpm wrangler d1 migrations apply certain-db --remote`
 
-### 7. ローカルDBの作成
-`pnpm wrangler d1 create certain-db --local --file=./worker/migrations/0000_xxxx.sql`
-
-### 8. ローカルDBに流す
-`pnpm wrangler d1 execute certain-db --local --file=./worker/migrations/0000_xxxx.sql`∂
+### 7. ローカルDBの作成とマイグレーション
+`pnpm wrangler d1 migrations apply chakkarabeat-db --local`
 
 参考: 
 - [drizzle公式](https://orm.drizzle.team/docs/connect-cloudflare-d1)
