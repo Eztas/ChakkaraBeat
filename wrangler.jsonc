@@ -16,6 +16,13 @@
 	"upload_source_maps": true,
 	"compatibility_flags": [
 		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "chakkarabeat_db",
+			"database_name": "chakkarabeat-db",
+			"database_id": "63e74859-67e7-4337-a906-6cf729ef0d42"
+		}
 	]
 	/**
 	 * Smart Placement

@@ -100,6 +100,34 @@ mainブランチにマージするだけでデプロイ
 
 ## プレビュー画面（マージ前確認用）
 
+### CLIで設定(ブランチとかを切らずに好きなタイミングで)
+
+`workers_dev`がEnabledなら利用可能, 閲覧可能な人をポリシーから設定
+
+`pnpm wrangler versions upload`
+
+URLを固定したいなら、`pnpm wrangler versions upload --preview-alias staging`
+
+参考: https://developers.cloudflare.com/workers/configuration/previews/
+
+### `wrangler.jsonc`に実装(GitHub未連携, 別Workerの作成)
+```
+{
+  "env": {
+    "preview": {
+      "name": "certain-preview",  // 別のWorker名
+      "d1_databases": [
+        {
+          "binding": "certain_db",
+          "database_name": "certain-db",
+          "database_id": "id"
+        }
+      ]
+    }
+  }
+}
+```
+
 ## データベース(本番用, 開発用, テスト用)
 
 jsoncに登録するのも忘れず
@@ -128,3 +156,44 @@ pnpm wrangler d1 execute certain-db --remote --file=./schema.sql
 # 本番デプロイ
 pnpm run deploy
 ```
+
+## ORM
+
+### 1. drizzle関係のインストール
+```
+pnpm add drizzle-orm
+pnpm add -D drizzle-kit
+```
+
+### 2. drizzle関係のファイル設定
+
+- `drizzle.config.ts`
+- `worker/db/schema.ts`
+
+### 3. SQLファイルの生成
+`pnpm drizzle-kit generate`
+
+マイグレーション結果はignoreしないことで再現性を保証
+
+### 4. 本番用データベース(D1)の作成
+`pnpm wrangler d1 create certain-db`
+
+バインディングとデータベース名は差別化
+(JavaScriptの変数名はハイフン不可, データベース名を変えても同一参照できるようにする)
+
+`For local dev, do you want to connect to the remote resource instead of a local resource?`はNoに(ローカルで誤ってリモートを消しうる可能性)
+
+### 5. wranglerの設定にdbのID追加
+`database_id`を`wrangler.jsonc`に追記(自動でやってくれることも)
+
+### 6. 本番用DBに流す
+`pnpm wrangler d1 migrations apply certain-db --remote`
+
+### 7. ローカルDBの作成とマイグレーション
+`pnpm wrangler d1 migrations apply chakkarabeat-db --local`
+
+参考: 
+- [drizzle公式](https://orm.drizzle.team/docs/connect-cloudflare-d1)
+- [Drizzleスキーマ](https://orm.drizzle.team/docs/sql-schema-declaration)
+- [Cloudflare D1公式](https://developers.cloudflare.com/d1/get-started/)
+- [Drizzleを使ったセットアップ事例](https://qiita.com/sigeta/items/99a625c17c6a0a75da54)
