@@ -150,6 +150,11 @@ pnpm add -D drizzle-kit
 ### 4. 本番用データベース(D1)の作成
 `pnpm wrangler d1 create certain-db`
 
+バインディングとデータベース名は差別化
+(JavaScriptの変数名はハイフン不可, データベース名を変えても同一参照できるようにする)
+
+`For local dev, do you want to connect to the remote resource instead of a local resource?`はNoに(ローカルで誤ってリモートを消しうる可能性)
+
 ### 5. wranglerの設定にdbのID追加
 `database_id`を`wrangler.jsonc`に追記
 
