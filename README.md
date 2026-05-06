@@ -190,7 +190,7 @@ pnpm add -D drizzle-kit
 `pnpm wrangler d1 migrations apply certain-db --remote`
 
 ### 7. ローカルDBの作成とマイグレーション
-`pnpm wrangler d1 migrations apply chakkarabeat-db --local`
+`pnpm wrangler d1 migrations apply certain-db --local`
 
 参考: 
 - [drizzle公式](https://orm.drizzle.team/docs/connect-cloudflare-d1)

@@ -3,10 +3,11 @@ import { sqliteTable, integer, text, real, primaryKey, unique } from 'drizzle-or
 import { sql } from 'drizzle-orm'
 
 export const songs = sqliteTable('songs', {
-  song_id:     integer('song_id').primaryKey(), // 自動インクリメントなどはあとで
+  song_id:     integer('song_id').primaryKey({ autoIncrement: true }),
   song_name:   text('song_name').notNull(), // 検索用のひらがな, アルファベットは後に実施
   singer_name: text('singer_name').notNull(), // 検索用のひらがな, アルファベットは後に実施
   youtube_url: text('youtube_url'),
+  // singer_idやsingerテーブルはMVPでは不要
 }, (t) => [
   unique().on(t.song_name, t.singer_name), // 同じ歌手・同じ曲の重複登録を防ぐ, 主キーほどではない
 ])
@@ -23,11 +24,13 @@ export const karaokeRecords = sqliteTable('karaoke_records', {
   created_at:   text('created_at').notNull().default(sql`(datetime('now', 'localtime'))`), // JST
   updated_at:   text('updated_at').notNull().default(sql`(datetime('now', 'localtime'))`), // JST
   last_sang_at: text('last_sang_at'),
-  score:        real('score'), // 機械はもうmemoに書いておく
+  max_score:    real('max_score'), // 機械はもうmemoに書いておく, どの日に最高スコアなのかはMVP外
   memo:         text('memo'),
   next:         integer('next', { mode: 'boolean' }).default(false), // drizzleを使ってbooleanも使用可能
   play_count:   integer('play_count').notNull().default(0),
-})
+}, (t) => [
+  unique().on(t.song_id, t.user_id),
+])
 
 export const karaokeScenes = sqliteTable('karaoke_scenes', {
   karaoke_id: integer('karaoke_id').notNull().references(() => karaokeRecords.karaoke_id),
