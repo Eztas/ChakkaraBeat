@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".", // shadcn用に追加
+    "paths": {      // shadcn用に追加
+      "@/*": ["./src/*"]
+    },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
