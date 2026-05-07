@@ -1,26 +1,34 @@
 // src/components/GachaView.tsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Flame } from 'lucide-react'
 
 type Song = {
   id: number;
-  sing_name: string;
+  song_name: string;
   singer_name: string;
 };
 
 const MOCK_SONGS: Song[] = [
-  { id: 1, sing_name: "怪獣の花唄", singer_name: "Vaundy"},
-  { id: 2, sing_name: "丸の内サディスティック", singer_name: "椎名林檎"},
+  { id: 1, song_name: "怪獣の花唄", singer_name: "Vaundy"},
+  { id: 2, song_name: "丸の内サディスティック", singer_name: "椎名林檎"},
 ]
 
 export default function GachaView() {
+  const [songs, setSongs] = useState<Song[]>([])
   const [selectedSong, setSelectedSong] = useState<Song | null>(null)
   const [isSpinning, setIsSpinning] = useState(false)
+
+    useEffect(() => {
+    fetch('/api/songs')
+      .then(res => res.json())
+      .then(setSongs)
+  }, [])
+
 
   const spinGacha = () => {
     setIsSpinning(true)
     setTimeout(() => {
-      const song = MOCK_SONGS[Math.floor(Math.random() * MOCK_SONGS.length)]
+      const song = songs[Math.floor(Math.random() * songs.length)]
       setSelectedSong(song)
       setIsSpinning(false)
     }, 200)
@@ -50,11 +58,11 @@ export default function GachaView() {
       ">
         {selectedSong ? (
           <div className={`text-center transition-all duration-300 ${isSpinning ? 'blur-md opacity-50' : 'opacity-100'}`}>
-            <p className="text-sm text-cyan-400 font-medium mb-2 tracking-widest uppercase">
+            <p className="text-sm text-cyan-400 font-medium mb-2 tracking-widest">
               {selectedSong.singer_name}
             </p>
             <h2 className="text-3xl font-bold mb-4 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
-              {selectedSong.sing_name}
+              {selectedSong.song_name}
             </h2>
           </div>
         ) : (
