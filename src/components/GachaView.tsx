@@ -2,13 +2,19 @@
 import { useState } from 'react'
 import { Flame } from 'lucide-react'
 
-const MOCK_SONGS = [
+type Song = {
+  id: number;
+  sing_name: string;
+  singer_name: string;
+};
+
+const MOCK_SONGS: Song[] = [
   { id: 1, sing_name: "怪獣の花唄", singer_name: "Vaundy"},
   { id: 2, sing_name: "丸の内サディスティック", singer_name: "椎名林檎"},
 ]
 
 export default function GachaView() {
-  const [selectedSong, setSelectedSong] = useState(null)
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null)
   const [isSpinning, setIsSpinning] = useState(false)
 
   const spinGacha = () => {

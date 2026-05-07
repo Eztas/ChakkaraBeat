@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".", // shadcn用に追加
     "paths": {      // shadcn用に追加
       "@/*": ["./src/*"]
     },
