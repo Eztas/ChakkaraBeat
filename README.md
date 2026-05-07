@@ -104,7 +104,7 @@ mainブランチにマージするだけでデプロイ
 
 `workers_dev`がEnabledなら利用可能, 閲覧可能な人をポリシーから設定
 
-`pnpm wrangler versions upload`
+`pnpm build` & `pnpm wrangler versions upload`
 
 URLを固定したいなら、`pnpm wrangler versions upload --preview-alias staging`
 
