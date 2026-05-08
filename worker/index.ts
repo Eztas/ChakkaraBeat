@@ -1,28 +1,21 @@
 // worker/index.ts
+import { Hono } from 'hono'
 import { drizzle } from 'drizzle-orm/d1'
 import { songs } from './db/schema'
 
-export default {
-  async fetch(request: Request, env: Env) {
-    const url = new URL(request.url);
+const app = new Hono<{ Bindings: Env }>()
 
-    if (url.pathname === '/api/songs') {
-      const db = drizzle(env.chakkarabeat_db)
-      const result = await db
-        .select({
-          song_id: songs.song_id,
-          song_name: songs.song_name,
-          singer_name: songs.singer_name,
-        })
-        .from(songs)
-      
-      return Response.json(result)
-    }
+const routes = app.get('/api/songs', async (c) => {
+  const db = drizzle(c.env.chakkarabeat_db)
+  const result = await db
+    .select({
+      song_id: songs.song_id,
+      song_name: songs.song_name,
+      singer_name: songs.singer_name,
+    })
+    .from(songs)
+  return c.json(result)
+})
 
-    if (url.pathname.startsWith("/api/")) {
-      return Response.json({ name: "cloudflare desuyo" });
-    }
-
-    return new Response(null, { status: 404 });
-  },
-} satisfies ExportedHandler<Env>;
+export type AppType = typeof routes // Hono RPC
+export default app

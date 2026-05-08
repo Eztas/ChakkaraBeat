@@ -1,29 +1,28 @@
 // src/components/GachaView.tsx
+import { hc } from 'hono/client'
+import type { AppType } from '../../worker/index'
 import { useState, useEffect } from 'react'
 import { Flame } from 'lucide-react'
 
 type Song = {
-  id: number;
+  song_id: number;
   song_name: string;
   singer_name: string;
 };
 
-const MOCK_SONGS: Song[] = [
-  { id: 1, song_name: "怪獣の花唄", singer_name: "Vaundy"},
-  { id: 2, song_name: "丸の内サディスティック", singer_name: "椎名林檎"},
-]
+// クライアント生成（URLだけ渡す）
+const client = hc<AppType>('/')
 
 export default function GachaView() {
   const [songs, setSongs] = useState<Song[]>([])
   const [selectedSong, setSelectedSong] = useState<Song | null>(null)
   const [isSpinning, setIsSpinning] = useState(false)
 
-    useEffect(() => {
-    fetch('/api/songs')
+  useEffect(() => {
+    client.api.songs.$get()        // URLが変わっても問題ない
       .then(res => res.json())
       .then(setSongs)
   }, [])
-
 
   const spinGacha = () => {
     setIsSpinning(true)
