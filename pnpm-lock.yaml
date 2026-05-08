@@ -23,6 +23,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2
+      hono:
+        specifier: ^4.12.18
+        version: 4.12.18
       lucide-react:
         specifier: ^1.14.0
         version: 1.14.0(react@19.2.5)
