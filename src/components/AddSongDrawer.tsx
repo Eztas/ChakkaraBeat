@@ -10,6 +10,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { Plus } from 'lucide-react'
+import { extractYoutubeId } from '@/lib/utils'
 
 const client = hc<AppType>('/')
 
@@ -23,12 +24,13 @@ export default function AddSongDrawer() {
   const handleSubmit = async () => {
     if (!songName || !singerName) return
     setIsLoading(true)
+    const youtubeId = youtubeUrl ? extractYoutubeId(youtubeUrl) : undefined
     try {
       await client.api.songs.$post({
         json: {
           song_name: songName,
           singer_name: singerName,
-          youtube_url: youtubeUrl || undefined,
+          youtube_url: youtubeId || undefined,
         }
       })
       setSongName('')
