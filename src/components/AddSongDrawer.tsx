@@ -14,6 +14,8 @@ import { extractYoutubeId } from '@/lib/utils'
 
 const client = hc<AppType>('/')
 
+// 曲追加用のドロワーコンポーネント
+// 曲を追加してもリロードしないと反映されないので注意
 export default function AddSongDrawer() {
   const [songName, setSongName] = useState('')
   const [singerName, setSingerName] = useState('')
