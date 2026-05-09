@@ -4,6 +4,8 @@ import type { AppType } from '../../worker/index'
 import { useState, useEffect } from 'react'
 import { Flame } from 'lucide-react'
 
+import AddSongDrawer from './AddSongDrawer'
+
 type Song = {
   song_id: number;
   song_name: string;
@@ -100,6 +102,7 @@ export default function GachaView() {
       {/* 背景の装飾：画面の端にぼんやりとした赤い光 */}
       <div className="fixed -bottom-20 -left-20 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
       <div className="fixed -top-20 -right-20 w-64 h-64 bg-cyan-600/10 blur-[100px] rounded-full" />
+      <AddSongDrawer />
     </div>
   )
 }
