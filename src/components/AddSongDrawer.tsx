@@ -61,7 +61,7 @@ export default function AddSongDrawer() {
         {/* スクロール可能エリア */}
         <div className="overflow-y-auto p-4 flex flex-col gap-4 pb-10">
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-cyan-400">曲名 *</label>
+            <label className="text-base text-cyan-400">曲名 *</label>
             <input
               value={songName}
               onChange={e => setSongName(e.target.value)}
@@ -70,7 +70,7 @@ export default function AddSongDrawer() {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-cyan-400">歌手名 *</label>
+            <label className="text-base text-cyan-400">歌手名 *</label>
             <input
               value={singerName}
               onChange={e => setSingerName(e.target.value)}
@@ -79,7 +79,7 @@ export default function AddSongDrawer() {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-cyan-400">YouTube URL（任意）</label>
+            <label className="text-base text-cyan-400">YouTube URL（任意）</label>
             <input
               value={youtubeUrl}
               onChange={e => setYoutubeUrl(e.target.value)}
