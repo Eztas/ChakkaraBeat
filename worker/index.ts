@@ -1,3 +1,4 @@
+/// <reference path="../worker-configuration.d.ts" />
 // worker/index.ts
 import { Hono } from 'hono'
 import { drizzle } from 'drizzle-orm/d1'
