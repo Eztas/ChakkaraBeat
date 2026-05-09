@@ -57,7 +57,9 @@ export default function AddSongDrawer() {
         <DrawerHeader>
           <DrawerTitle className="text-white">曲を追加</DrawerTitle>
         </DrawerHeader>
-        <div className="p-4 flex flex-col gap-4 pb-10">
+
+        {/* スクロール可能エリア */}
+        <div className="overflow-y-auto p-4 flex flex-col gap-4 pb-10">
           <div className="flex flex-col gap-1">
             <label className="text-sm text-cyan-400">曲名 *</label>
             <input
