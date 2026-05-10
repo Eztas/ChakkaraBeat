@@ -1,10 +1,10 @@
 // src/App.tsx
-import GachaView from "./components/GachaView";
+import FilterView from "./components/FilterView";
 
 function App() {
   return (
     <main>
-      <GachaView />
+      <FilterView />
     </main>
   );
 }
