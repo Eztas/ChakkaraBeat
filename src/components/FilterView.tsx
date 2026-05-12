@@ -4,7 +4,7 @@ import type { AppType } from '../../worker/index'
 import { useState, useEffect } from 'react'
 import { Flame } from 'lucide-react'
 
-import AddSongDrawer from './AddSongDrawer'
+import AddRecordDrawer from './AddRecordDrawer'
 
 // バックエンドの fullRecords に合わせた型定義
 type KaraokeRecord = {
@@ -101,7 +101,7 @@ export default function FilterView() {
 
       <div className="fixed -bottom-20 -left-20 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
       <div className="fixed -top-20 -right-20 w-64 h-64 bg-cyan-600/10 blur-[100px] rounded-full" />
-      <AddSongDrawer />
+      <AddRecordDrawer />
     </div>
   )
 }
