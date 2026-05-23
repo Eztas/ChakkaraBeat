@@ -85,7 +85,7 @@ const routes = app
       singer_name: body.singer_name,
       youtube_url: body.youtube_url ?? null,
     })
-    .onConflictDoNothing() // 同名の曲があればスキップ
+    .onConflictDoNothing() // スキーマにある同名歌手かつ同名の曲があればスキップ
     .returning() // insertした直後のDBが自動採番したIDなどを含む完全なレコード
 
   const song_id = newSong?.song_id ?? await db // 重複時は曲名が一致するidを取得
