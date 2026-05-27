@@ -7,6 +7,7 @@ declare namespace Cloudflare {
 	}
 	interface Env {
 		chakkarabeat_db: D1Database;
+        ADMIN_TOKEN: string;
 	}
 }
 interface Env extends Cloudflare.Env {}
