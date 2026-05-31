@@ -91,6 +91,7 @@ export default function AddRecordDrawer() {
       setNext(false)
       setSelectedSceneIds([])
       setIsOpen(false)
+      alert("Success")
     } catch (e) {
       console.error(e)
     } finally {
