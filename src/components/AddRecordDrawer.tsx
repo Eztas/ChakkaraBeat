@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/drawer'
 import { Plus } from 'lucide-react'
 import { extractYoutubeId } from '@/lib/utils'
+import { getAdminToken } from '../lib/auth'
 
 const client = hc<AppType>('/')
 
@@ -29,6 +30,14 @@ export default function AddRecordDrawer() {
   const [selectedSceneIds, setSelectedSceneIds] = useState<number[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const [adminToken, setAdminToken] = useState<string | null>(null)
+  useEffect(() => {
+    const token = getAdminToken()
+    if (token) {
+        setAdminToken(token)
+    }
+  }, [])
 
   // シーン一覧を取得
   useEffect(() => {
@@ -53,7 +62,7 @@ export default function AddRecordDrawer() {
     const youtubeId = youtubeUrl ? extractYoutubeId(youtubeUrl) : undefined
 
     try {
-      await client.api['karaoke_records'].$post({
+        const res = await client.api['karaoke_records'].$post({
         json: {
           song_name: songName,
           singer_name: singerName,
@@ -63,7 +72,16 @@ export default function AddRecordDrawer() {
           memo: memo || undefined,
           next,
         }
+      }, {
+        headers: {
+          'X-Admin-Token': adminToken || ''
+        }
       })
+
+      if ((res.status as number) === 401) {
+        alert("Cannot add record")
+        return
+      }
 
       // リセット
       setSongName('')
@@ -73,6 +91,7 @@ export default function AddRecordDrawer() {
       setNext(false)
       setSelectedSceneIds([])
       setIsOpen(false)
+      alert("Success")
     } catch (e) {
       console.error(e)
     } finally {

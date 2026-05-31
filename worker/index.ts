@@ -5,8 +5,18 @@ import { eq, and } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
 import { songs, karaokeRecords, karaokeScenes, scenes } from './db/schema'
 import * as schema from './db/schema'
+import { createMiddleware } from 'hono/factory'
 
 const app = new Hono<{ Bindings: Env }>()
+
+// 認証ミドルウェア, 容易, hono/factoryで型チェックを適用
+const adminAuth = createMiddleware<{ Bindings: Env }>(async (c, next) => {
+  const token = c.req.header('X-Admin-Token')
+  if (!token || token !== c.env.ADMIN_TOKEN) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  await next()
+})
 
 const routes = app
   .get('/api/songs', async (c) => {
@@ -20,7 +30,7 @@ const routes = app
       .from(songs)
     return c.json(result)
   })
-  .post('/api/songs', async (c) => {
+  .post('/api/songs', adminAuth, async (c) => {
     const body = await c.req.json<{
       song_name: string
       singer_name: string
@@ -63,7 +73,7 @@ const routes = app
 
     return c.json(fullRecords)
   })
-.post('/api/karaoke_records', async (c) => { // 
+.post('/api/karaoke_records', adminAuth, async (c) => {
   const body = await c.req.json<{
     song_name: string
     singer_name: string
