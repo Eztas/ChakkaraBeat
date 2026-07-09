@@ -12,7 +12,6 @@ import {
 import { Plus } from 'lucide-react'
 import { extractYoutubeId } from '@/lib/utils'
 import { getAdminToken } from '../lib/auth'
-import { fireAnimation } from './FireAnimation'
 
 const client = hc<AppType>('/')
 
@@ -92,7 +91,6 @@ export default function AddRecordDrawer() {
       setNext(false)
       setSelectedSceneIds([])
       setIsOpen(false)
-      fireAnimation()
     } catch (e) {
       console.error(e)
     } finally {
