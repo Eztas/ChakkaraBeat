@@ -1,4 +1,4 @@
-// src/components/animations/logStackAnimation.ts
+// src/components/fireAnimation.ts
 
 export const fireAnimation = () => {
   const style = document.createElement('style')
