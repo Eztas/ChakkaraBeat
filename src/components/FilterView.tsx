@@ -92,7 +92,7 @@ export default function FilterView() {
   })
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#020617] text-white p-6 overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#020617] text-white p-6">
       
       <style>{`
         @keyframes spark-burst {
@@ -192,17 +192,18 @@ export default function FilterView() {
         <button
           onClick={spinGacha}
           disabled={isSpinning || records.length === 0}
-          aria-label="ガチャを回す"
-          className="
+          className={`
             relative w-3/5 aspect-square flex items-center justify-center
             bg-transparent border-none outline-none rounded-full
             disabled:opacity-70 disabled:cursor-not-allowed
             active:scale-95 transition-transform
-          "
+          `}
         >
           <svg
-            className={isSpinning ? 'animate-spin' : ''}
+            width="100%"
+            height="100%"
             viewBox="0 0 100 100"
+            className={` ${isSpinning ? 'animate-spin' : ''}`}
             style={{ transformOrigin: 'center center', animationDuration: '0.4s' }}
           >
             <defs>
