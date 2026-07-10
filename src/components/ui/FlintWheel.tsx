@@ -1,14 +1,12 @@
 // src/components/ui/FlintWheel.tsx
-import React from 'react';
 
 type FlintWheelProps = {
   onClick: () => void;
   disabled: boolean;
   isSpinning: boolean;
-  children?: React.ReactNode;
 };
 
-export function FlintWheel({ onClick, disabled, isSpinning, children }: FlintWheelProps) {
+export function FlintWheel({ onClick, disabled, isSpinning }: FlintWheelProps) {
   const teethCount = 36;
   const teeth = Array.from({ length: teethCount }).map((_, i) => {
     const angle = (360 / teethCount) * i;
@@ -33,7 +31,7 @@ export function FlintWheel({ onClick, disabled, isSpinning, children }: FlintWhe
       onClick={onClick}
       disabled={disabled}
       className={`
-        relative w-3/5 aspect-square flex items-center justify-center
+        w-full aspect-square flex items-center justify-center
         bg-transparent border-none outline-none rounded-full
         disabled:opacity-70 disabled:cursor-not-allowed
         active:scale-95 transition-transform
@@ -83,7 +81,6 @@ export function FlintWheel({ onClick, disabled, isSpinning, children }: FlintWhe
         <circle cx="50" cy="50" r="13" fill="url(#hubGradient)" stroke="#451a03" strokeWidth="1" />
         <circle cx="50" cy="50" r="4" fill="#451a03" opacity="0.6" />
       </svg>
-      {children}
     </button>
   );
 }

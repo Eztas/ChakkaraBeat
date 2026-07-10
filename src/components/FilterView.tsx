@@ -133,13 +133,14 @@ export default function FilterView() {
 
       <div className="mt-12 w-full max-w-sm flex items-center justify-center gap-2">
         <LighterBody />
-        <FlintWheel
-          onClick={spinGacha}
-          disabled={isSpinning || records.length === 0}
-          isSpinning={isSpinning}
-        >
+        <div className="relative w-3/5 aspect-square">
+          <FlintWheel
+            onClick={spinGacha}
+            disabled={isSpinning || records.length === 0}
+            isSpinning={isSpinning}
+          />
           <Sparks isSpinning={isSpinning} sparks={sparks} />
-        </FlintWheel>
+        </div>
       </div>
 
       <div className="fixed -bottom-20 -left-20 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
