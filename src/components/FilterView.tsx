@@ -197,13 +197,13 @@ export default function FilterView() {
             bg-transparent border-none outline-none rounded-full
             disabled:opacity-70 disabled:cursor-not-allowed
             active:scale-95 transition-transform
+            ${isSpinning ? 'animate-spin' : ''}
           `}
         >
           <svg
             width="100%"
             height="100%"
             viewBox="0 0 100 100"
-            className={` ${isSpinning ? 'animate-spin' : ''}`}
             style={{ transformOrigin: 'center center', animationDuration: '0.4s' }}
           >
             <defs>
