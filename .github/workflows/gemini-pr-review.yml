@@ -2,7 +2,7 @@ name: Gemini PR Review
 
 on:
   pull_request:
-    types: [opened, synchronized]   # PR出した時だけ, 今のテストプレイだけsynchronized追加
+    types: [opened, synchronized]   # PR作成時と、開いた後の追加プッシュ時に起動
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4   # 安定版の v4 を指定
 
       - name: Run Gemini CLI PR Review
         uses: google-github-actions/run-gemini-cli@v0
@@ -22,4 +22,5 @@ jobs:
           GEMINI_CLI_TRUST_WORKSPACE: true
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          workflow: pr-review
+          prompt: '/review'         # workflow から prompt: '/review' に修正
+          
