@@ -2,7 +2,7 @@ name: Gemini PR Review
 
 on:
   pull_request:
-    types: [opened, synchronized]   # PR作成時と、開いた後の追加プッシュ時に起動
+    types: [opened, synchronize]   # PR作成時と、開いた後の追加プッシュ時に起動
 
 permissions:
   contents: read
@@ -23,4 +23,3 @@ jobs:
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           prompt: '/review'         # workflow から prompt: '/review' に修正
-          
