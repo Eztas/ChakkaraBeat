@@ -4,21 +4,15 @@ import type { AppType } from '../../worker/index'
 import { useState, useEffect } from 'react'
 
 import AddRecordDrawer from './AddRecordDrawer'
+import { LighterBody } from './ui/LighterBody'
+import { FlintWheel } from './ui/FlintWheel'
+import { type Spark, Sparks } from './ui/Sparks'
 
 type KaraokeRecord = {
   karaoke_id: number;
   song_name: string;
   singer_name: string;
   next: boolean;
-};
-
-type Spark = {
-  id: number;
-  mx: string; 
-  my: string; 
-  color: string;
-  size: number;
-  delay: number;
 };
 
 const client = hc<AppType>('/')
@@ -71,25 +65,6 @@ export default function FilterView() {
       setSparks([]) 
     }, 1000)
   }
-
-  const teethCount = 36
-  const teeth = Array.from({ length: teethCount }).map((_, i) => {
-    const angle = (360 / teethCount) * i
-    return (
-      <rect
-        key={i}
-        x="47"
-        y="4"
-        width="6"
-        height="9"
-        rx="1"
-        fill="#3f3f46"
-        stroke="#18181b"
-        strokeWidth="0.6"
-        transform={`rotate(${angle} 50 50)`}
-      />
-    )
-  })
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#020617] text-white p-6">
@@ -157,120 +132,14 @@ export default function FilterView() {
       </div>
 
       <div className="mt-12 w-full max-w-sm flex items-center justify-center gap-2">
-
-        {/* 黒いボディ部分（真鍮リベット付き） */}
-        <div
-          className="relative w-2/5 aspect-square rounded-l-md pointer-events-none"
-          style={{
-            background: 'linear-gradient(135deg, #1c1c1e 0%, #0a0a0b 60%, #000 100%)',
-            boxShadow: 'inset 0 0 12px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.5)',
-          }}
-        >
-          {[
-            { top: '20%', left: '30%' },
-            { top: '20%', left: '65%' },
-            { top: '50%', left: '18%' },
-            { top: '52%', left: '55%' },
-            { top: '80%', left: '35%' },
-            { top: '80%', left: '68%' },
-          ].map((pos, i) => (
-            <div
-              key={i}
-              className="absolute w-[14%] h-[14%] rounded-full"
-              style={{
-                top: pos.top,
-                left: pos.left,
-                transform: 'translate(-50%, -50%)',
-                background: 'radial-gradient(circle at 35% 30%, #fde68a, #b45309 70%, #78350f 100%)',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.6)',
-              }}
-            />
-          ))}
-        </div>
-
-        {/* フリントホイール本体 */}
-        <button
+        <LighterBody />
+        <FlintWheel
           onClick={spinGacha}
           disabled={isSpinning || records.length === 0}
-          className={`
-            relative w-3/5 aspect-square flex items-center justify-center
-            bg-transparent border-none outline-none rounded-full
-            disabled:opacity-70 disabled:cursor-not-allowed
-            active:scale-95 transition-transform
-            ${isSpinning ? 'animate-spin' : ''}
-          `}
+          isSpinning={isSpinning}
         >
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 100 100"
-            style={{ transformOrigin: 'center center', animationDuration: '0.4s' }}
-          >
-            <defs>
-              <radialGradient id="wheelBody" cx="35%" cy="30%" r="75%">
-                <stop offset="0%" stopColor="#52525b" />
-                <stop offset="55%" stopColor="#27272a" />
-                <stop offset="100%" stopColor="#09090b" />
-              </radialGradient>
-              <radialGradient id="hubGradient" cx="35%" cy="30%" r="75%">
-                <stop offset="0%" stopColor="#fef3c7" />
-                <stop offset="45%" stopColor="#d97706" />
-                <stop offset="100%" stopColor="#78350f" />
-              </radialGradient>
-            </defs>
-
-            {teeth}
-
-            <circle cx="50" cy="50" r="38" fill="url(#wheelBody)" stroke="#000" strokeWidth="1.5" />
-
-            {Array.from({ length: 24 }).map((_, i) => {
-              const angle = (360 / 24) * i
-              return (
-                <line
-                  key={`line-${i}`}
-                  x1="50"
-                  y1="16"
-                  x2="50"
-                  y2="24"
-                  stroke="#000"
-                  strokeWidth="0.8"
-                  opacity="0.5"
-                  transform={`rotate(${angle} 50 50)`}
-                />
-              )
-            })}
-
-            <circle cx="50" cy="50" r="13" fill="url(#hubGradient)" stroke="#451a03" strokeWidth="1" />
-            <circle cx="50" cy="50" r="4" fill="#451a03" opacity="0.6" />
-          </svg>
-
-          {/* 💥 瞬間的な大閃光（位置を左上の境界へ変更） */}
-          {isSpinning && (
-            <div 
-              className="absolute animate-flash rounded-full bg-gradient-to-r from-amber-400 to-orange-500 pointer-events-none z-40"
-              style={{ top: '25%', left: '8%', width: '100px', height: '100px' }}
-            />
-          )}
-
-          {/* ✴️ 大量の火花パーティクル（位置を左上の境界へ変更） */}
-          {sparks.map((spark) => (
-            <div
-              key={spark.id}
-              className="absolute animate-spark pointer-events-none rounded-full z-50"
-              style={{
-                top: '25%', // 火花が散る着火点（ホイールと左の火打石の間）
-                left: '8%',
-                width: `${spark.size}px`,
-                height: `${spark.size}px`,
-                backgroundColor: spark.color,
-                boxShadow: `0 0 ${spark.size * 1.5}px ${spark.color}, 0 0 ${spark.size * 3}px ${spark.color}`,
-                animationDelay: `${spark.delay}s`,
-                ['--mx' as any]: spark.mx,
-                ['--my' as any]: spark.my,
-              }}
-            />
-          ))}
-        </button>
+          <Sparks isSpinning={isSpinning} sparks={sparks} />
+        </FlintWheel>
       </div>
 
       <div className="fixed -bottom-20 -left-20 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
@@ -279,3 +148,4 @@ export default function FilterView() {
     </div>
   )
 }
+
