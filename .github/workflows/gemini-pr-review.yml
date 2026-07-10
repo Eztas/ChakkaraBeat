@@ -1,0 +1,23 @@
+name: Gemini PR Review
+
+on:
+  pull_request:
+    types: [opened]   # PR出した時だけ
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  gemini-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Run Gemini CLI PR Review
+        uses: google-github-actions/run-gemini-cli@v0
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          workflow: pr-review
