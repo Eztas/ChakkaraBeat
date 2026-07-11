@@ -28,6 +28,7 @@ skillsなしでもいい感じだった
 
 - Github上の会話でレビューを出せないこと
     - `/review`だとactionsの中にしか出ない
+    - `gemini-review Gemini CLI stderr was not valid JSON`が解決しない
 - tomlとyamlの使い分けがあまり分かっていないこと
 - PRメッセージの使い分けがまだであること
 - おそらくコミット履歴を追えていないこと
