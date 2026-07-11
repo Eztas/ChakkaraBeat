@@ -67,7 +67,7 @@ export default function FilterView() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#020617] text-white p-6">
+    <div className="flex flex-col items-center justify-center h-screen h-[100dvh] bg-[#020617] text-white p-4 sm:p-6 overflow-hidden select-none">
       
       <style>{`
         @keyframes spark-burst {
@@ -97,7 +97,7 @@ export default function FilterView() {
       `}</style>
 
       <h1 className="
-        text-4xl font-black mb-10 tracking-tighter
+        text-3xl sm:text-4xl font-black mb-6 sm:mb-10 tracking-tighter
         bg-gradient-to-br from-red-500 via-orange-500 to-amber-400 
         bg-clip-text text-transparent
         drop-shadow-[0_0_15px_rgba(239,68,68,0.6)]
@@ -106,23 +106,23 @@ export default function FilterView() {
       </h1>
 
       <div className="
-        w-full max-w-sm aspect-square 
+        w-full max-w-[280px] sm:max-w-sm aspect-square 
         bg-[#0f172a]/80 backdrop-blur-md
         rounded-[var(--radius)] border border-cyan-500/30
-        flex flex-col items-center justify-center p-8 relative 
+        flex flex-col items-center justify-center p-6 sm:p-8 relative 
         shadow-[0_0_30px_-10px_rgba(6,182,212,0.4)]
       ">
         {selectedRecord ? (
-          <div className={`text-center transition-all duration-300 ${isSpinning ? 'blur-md opacity-50' : 'opacity-100'}`}>
-            <p className="text-sm text-cyan-400 font-medium mb-2 tracking-widest">
+          <div className={`text-center px-2 transition-all duration-300 ${isSpinning ? 'blur-md opacity-50' : 'opacity-100'}`}>
+            <p className="text-xs sm:text-sm text-cyan-400 font-medium mb-1 sm:mb-2 tracking-widest break-all">
               {selectedRecord.singer_name}
             </p>
-            <h2 className="text-3xl font-bold mb-4 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] break-all">
               {selectedRecord.song_name}
             </h2>
           </div>
         ) : (
-          <p className="text-slate-400 text-center leading-relaxed">
+          <p className="text-slate-400 text-center text-sm sm:text-base leading-relaxed">
             次歌う曲を<br/>
             <span className="text-cyan-400 font-bold">ボタン1つで着火！</span>
           </p>
@@ -131,7 +131,7 @@ export default function FilterView() {
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.2),transparent_70%)]" />
       </div>
 
-      <div className="mt-12 w-full max-w-sm flex items-center justify-center gap-2">
+      <div className="mt-6 sm:mt-12 w-full max-w-[280px] sm:max-w-sm flex items-center justify-center gap-2">
         <LighterBody />
         <div className="relative w-3/5 aspect-square">
           <FlintWheel
@@ -149,4 +149,3 @@ export default function FilterView() {
     </div>
   )
 }
-
