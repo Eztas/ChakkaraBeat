@@ -57,7 +57,7 @@ export default function FilterView() {
       setSelectedRecord(record)
       setIsSpinning(false)
       setSparks([]) 
-    }, 1000)
+    }, 400)
   }
 
   return (
