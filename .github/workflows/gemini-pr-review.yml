@@ -20,21 +20,12 @@ jobs:
         uses: google-github-actions/run-gemini-cli@v0
         env:
           GEMINI_CLI_TRUST_WORKSPACE: true
-        with:
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          prompt: '/review'         # workflow から prompt: '/review' に修正
-          gemini_model: 'gemini-3.1-flash-lite' # 軽いモデルに変更
-          
-      - name: Run Gemini CLI PR Review
-        uses: google-github-actions/run-gemini-cli@v0
-        env:
-          GEMINI_CLI_TRUST_WORKSPACE: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           gemini_model: 'gemini-3.1-flash-lite'
           github_pr_number: ${{ github.event.pull_request.number }}
-          prompt: |
+          prompt: | # /reviewにしてもGithub Actions上にコメントされるだけ
             レビューを行い、GitHub MCP ツールを使ってこのPRに結果を投稿してください。
           settings: |-
             {
@@ -43,7 +34,7 @@ jobs:
                   "command": "docker",
                   "args": [
                     "run", "-i", "--rm",
-                    "-e", "github_token",
+                    "-e", "GITHUB_TOKEN",
                     "ghcr.io/github/github-mcp-server:v0.27.0"
                   ],
                   "includeTools": [

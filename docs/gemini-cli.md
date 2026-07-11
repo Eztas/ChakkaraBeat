@@ -27,11 +27,13 @@ skillsなしでもいい感じだった
 ## 現状の課題(2026/07/11)
 
 - Github上の会話でレビューを出せないこと
+    - `/review`だとactionsの中にしか出ない
 - tomlとyamlの使い分けがあまり分かっていないこと
-- PRメッセ時の使い分けがまだであること
+- PRメッセージの使い分けがまだであること
 - おそらくコミット履歴を追えていないこと
 - dispatch.yml（とtoml）を追加して@マークメンションでも会話できるようにする
 - MCPをうまく使えていない
+- そもそもjobに警告が出ていてpostがクリーンになっている
 
 ## 参考文献
 [https://github.com/google-github-actions/run-gemini-cli](https://github.com/google-github-actions/run-gemini-cli)
