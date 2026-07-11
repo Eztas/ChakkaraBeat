@@ -24,6 +24,15 @@
 
 skillsなしでもいい感じだった
 
+## 現状の課題(2026/07/11)
+
+- Github上の会話でレビューを出せないこと
+- tomlとyamlの使い分けがあまり分かっていないこと
+- PRメッセ時の使い分けがまだであること
+- おそらくコミット履歴を追えていないこと
+- dispatch.yml（とtoml）を追加して@マークメンションでも会話できるようにする
+- MCPをうまく使えていない
+
 ## 参考文献
 [https://github.com/google-github-actions/run-gemini-cli](https://github.com/google-github-actions/run-gemini-cli)
 

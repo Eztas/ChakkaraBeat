@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4   # 安定版の v4 を指定
+        uses: actions/checkout@v6
 
       - name: Run Gemini CLI PR Review
         uses: google-github-actions/run-gemini-cli@v0
@@ -23,4 +23,38 @@ jobs:
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           prompt: '/review'         # workflow から prompt: '/review' に修正
-          gemini_model: 'gemini-3.1-flash-lite' # すぐ超過する
+          gemini_model: 'gemini-3.1-flash-lite' # 軽いモデルに変更
+          
+      - name: Run Gemini CLI PR Review
+        uses: google-github-actions/run-gemini-cli@v0
+        env:
+          GEMINI_CLI_TRUST_WORKSPACE: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          gemini_model: 'gemini-3.1-flash-lite'
+          github_pr_number: ${{ github.event.pull_request.number }}
+          prompt: |
+            レビューを行い、GitHub MCP ツールを使ってこのPRに結果を投稿してください。
+          settings: |-
+            {
+              "mcpServers": {
+                "github": {
+                  "command": "docker",
+                  "args": [
+                    "run", "-i", "--rm",
+                    "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+                    "ghcr.io/github/github-mcp-server:v0.27.0"
+                  ],
+                  "includeTools": [
+                    "add_comment_to_pending_review",
+                    "pull_request_read",
+                    "create_pending_pull_request_review",
+                    "submit_pending_pull_request_review"
+                  ]
+                }
+              }
+            }
+        env:
+          GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
