@@ -32,3 +32,9 @@ dist-ssr
 .dev.vars*
 !.env.example
 migrations/meta
+
+# gemini-cli settings
+.gemini/
+
+# GitHub App credentials
+gha-creds-*.json
