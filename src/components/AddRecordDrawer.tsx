@@ -107,7 +107,10 @@ export default function AddRecordDrawer() {
 	return (
 		<Drawer open={isOpen} onOpenChange={setIsOpen}>
 			<DrawerTrigger asChild>
-				<button className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-red-600 to-amber-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/30">
+				<button
+					type="button"
+					className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-red-600 to-amber-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/30"
+				>
 					<Plus size={28} className="text-white" />
 				</button>
 			</DrawerTrigger>
@@ -170,6 +173,7 @@ export default function AddRecordDrawer() {
 									const selected = selectedSceneIds.includes(scene.scene_id);
 									return (
 										<button
+											type="button"
 											key={scene.scene_id}
 											onClick={() => toggleScene(scene.scene_id)}
 											className={`
@@ -210,6 +214,7 @@ export default function AddRecordDrawer() {
 							次に歌いたい（Next）
 						</span>
 						<button
+							type="button"
 							onClick={() => setNext((prev) => !prev)}
 							className={`
                 relative w-12 h-6 rounded-full transition-colors duration-300
@@ -227,6 +232,7 @@ export default function AddRecordDrawer() {
 
 					{/* 追加ボタン */}
 					<button
+						type="button"
 						onClick={handleSubmit}
 						disabled={!songName || !singerName || isLoading}
 						className="w-full py-4 bg-gradient-to-r from-red-600 to-amber-500 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed mt-2"
