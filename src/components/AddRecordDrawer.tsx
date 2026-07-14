@@ -119,8 +119,11 @@ export default function AddRecordDrawer() {
 				<div className="overflow-y-auto p-4 flex flex-col gap-4 pb-10">
 					{/* 曲名 */}
 					<div className="flex flex-col gap-1">
-						<label className="text-base text-cyan-400">曲名 *</label>
+						<label htmlFor="songName" className="text-base text-cyan-400">
+							曲名 *
+						</label>
 						<input
+							id="songName"
 							value={songName}
 							onChange={(e) => setSongName(e.target.value)}
 							placeholder="世界に一つだけの花"
@@ -130,8 +133,11 @@ export default function AddRecordDrawer() {
 
 					{/* 歌手名 */}
 					<div className="flex flex-col gap-1">
-						<label className="text-base text-cyan-400">歌手名 *</label>
+						<label htmlFor="singerName" className="text-base text-cyan-400">
+							歌手名 *
+						</label>
 						<input
+							id="singerName"
 							value={singerName}
 							onChange={(e) => setSingerName(e.target.value)}
 							placeholder="SMAP"
@@ -141,10 +147,11 @@ export default function AddRecordDrawer() {
 
 					{/* YouTube URL */}
 					<div className="flex flex-col gap-1">
-						<label className="text-base text-cyan-400">
+						<label htmlFor="youtubeUrl" className="text-base text-cyan-400">
 							YouTube URL（任意）
 						</label>
 						<input
+							id="youtubeUrl"
 							value={youtubeUrl}
 							onChange={(e) => setYoutubeUrl(e.target.value)}
 							placeholder="https://youtube.com/watch?v=..."
@@ -155,7 +162,7 @@ export default function AddRecordDrawer() {
 					{/* シーン選択 */}
 					{scenes.length > 0 && (
 						<div className="flex flex-col gap-2">
-							<label className="text-base text-cyan-400">
+							<label htmlFor="sceneSelect" className="text-base text-cyan-400">
 								シーン（複数選択可）
 							</label>
 							<div className="flex flex-wrap gap-2">
@@ -184,8 +191,11 @@ export default function AddRecordDrawer() {
 
 					{/* メモ */}
 					<div className="flex flex-col gap-1">
-						<label className="text-base text-cyan-400">メモ（任意）</label>
+						<label htmlFor="memo" className="text-base text-cyan-400">
+							メモ（任意）
+						</label>
 						<textarea
+							id="memo"
 							value={memo}
 							onChange={(e) => setMemo(e.target.value)}
 							placeholder="裏声より地声の方が安定"

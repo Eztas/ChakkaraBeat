@@ -44,6 +44,7 @@ export function FlintWheel({ onClick, disabled, isSpinning }: FlintWheelProps) {
 				viewBox="0 0 100 100"
 				style={{ transformOrigin: "center center", animationDuration: "0.4s" }}
 			>
+				<title>FlintWheel</title>
 				<defs>
 					<radialGradient id="wheelBody" cx="35%" cy="30%" r="75%">
 						<stop offset="0%" stopColor="#52525b" />
