@@ -30,17 +30,19 @@ export function Sparks({ isSpinning, sparks }: SparksProps) {
 				<div
 					key={spark.id}
 					className="absolute animate-spark pointer-events-none rounded-full z-50"
-					style={{
-						top: "25%", // 火花が散る着火点（ホイールと左の火打石の間）
-						left: "8%",
-						width: `${spark.size}px`,
-						height: `${spark.size}px`,
-						backgroundColor: spark.color,
-						boxShadow: `0 0 ${spark.size * 1.5}px ${spark.color}, 0 0 ${spark.size * 3}px ${spark.color}`,
-						animationDelay: `${spark.delay}s`,
-						["--mx" as any]: spark.mx,
-						["--my" as any]: spark.my,
-					}}
+					style={
+						{
+							top: "25%", // 火花が散る着火点（ホイールと左の火打石の間）
+							left: "8%",
+							width: `${spark.size}px`,
+							height: `${spark.size}px`,
+							backgroundColor: spark.color,
+							boxShadow: `0 0 ${spark.size * 1.5}px ${spark.color}, 0 0 ${spark.size * 3}px ${spark.color}`,
+							animationDelay: `${spark.delay}s`,
+							"--mx": spark.mx,
+							"--my": spark.my,
+						} as React.CSSProperties
+					}
 				/>
 			))}
 		</>
