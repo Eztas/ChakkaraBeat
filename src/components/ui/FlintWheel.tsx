@@ -12,7 +12,7 @@ export function FlintWheel({ onClick, disabled, isSpinning }: FlintWheelProps) {
 		const angle = (360 / teethCount) * i;
 		return (
 			<rect
-				key={i}
+				key={`teeth-${angle}`}
 				x="47"
 				y="4"
 				width="6"
@@ -28,6 +28,7 @@ export function FlintWheel({ onClick, disabled, isSpinning }: FlintWheelProps) {
 
 	return (
 		<button
+			type="button"
 			onClick={onClick}
 			disabled={disabled}
 			className={`
@@ -73,7 +74,7 @@ export function FlintWheel({ onClick, disabled, isSpinning }: FlintWheelProps) {
 					const angle = (360 / 24) * i;
 					return (
 						<line
-							key={`line-${i}`}
+							key={`line-${angle}`}
 							x1="50"
 							y1="16"
 							x2="50"

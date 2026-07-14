@@ -17,9 +17,9 @@ export function LighterBody() {
 				{ top: "52%", left: "55%" },
 				{ top: "80%", left: "35%" },
 				{ top: "80%", left: "68%" },
-			].map((pos, i) => (
+			].map((pos) => (
 				<div
-					key={i}
+					key={`${pos.top}-${pos.left}`}
 					className="absolute w-[14%] h-[14%] rounded-full"
 					style={{
 						top: pos.top,
