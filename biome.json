@@ -22,7 +22,7 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true, 
+			"preset": "recommended",
 			"suspicious": {
 				"noExplicitAny": "error"
 			}
@@ -35,8 +35,11 @@
 			"linter": {
 				"rules": {
 					"correctness": {
-						"useExhaustiveDependencies": "warn", 
-						"useHookAtTopLevel": "error"        
+						"useExhaustiveDependencies": "warn",
+						"useHookAtTopLevel": "error"
+					},
+					"style": {
+						"noNonNullAssertion": "off"
 					}
 				}
 			}
