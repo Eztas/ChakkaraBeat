@@ -48,6 +48,16 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": ["src/components/AddRecordDrawer.tsx"],
+			"linter": {
+				"rules": {
+					"complexity": {
+						"useLiteralKeys": "off"
+					}
+				}
+			}
 		}
 	],
 	"assist": {
