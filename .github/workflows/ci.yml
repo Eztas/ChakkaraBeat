@@ -1,0 +1,35 @@
+name: CI (Formatter, Linter)
+
+on:
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # pnpmのセットアップ（バージョン指定はpackage.jsonから自動取得）
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false # setup-node側のキャッシュ完了後にインストールしたいので一旦false
+
+      # Node.jsの設定とpnpmストアのキャッシュ有効化
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "pnpm" # pnpmのグローバルキャッシュを自動で有効化
+
+      # 依存関係のインストール（ロックファイルが厳密に一致することを確認）
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Biomeを使ったチェック（linter & format）
+      - name: Run Biome Check
+        run: pnpm check
