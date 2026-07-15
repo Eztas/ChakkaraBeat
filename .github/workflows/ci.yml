@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      # pnpmのセットアップ（バージョン指定はpackage.jsonから自動取得）
+      # pnpmのセットアップ（バージョン指定はpackage.jsonに書いたローカルのバージョンを取得）
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -32,4 +32,4 @@ jobs:
 
       # Biomeを使ったチェック（linter & format）
       - name: Run Biome Check
-        run: pnpm check
+        run: pnpm run check

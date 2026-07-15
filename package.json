@@ -2,12 +2,13 @@
 	"name": "chakkarabeat",
 	"private": true,
 	"version": "0.0.0",
+	"packageManager": "pnpm@10.18.3",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"check": "biome check --write",
-		"preview": "pnpm run build && pnpm wrangler versions upload",
+		"preview": "pnpm runc build && pnpm wrangler versions upload",
 		"preview-vite": "pnpm run build && vite preview",
 		"deploy": "pnpm run build && wrangler deploy",
 		"cf-typegen": "wrangler types"
