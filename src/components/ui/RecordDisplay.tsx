@@ -1,94 +1,125 @@
 // src/components/ui/RecordDisplay.tsx
 
 export type KaraokeRecord = {
-  karaoke_id: number;
-  song_name: string;
-  singer_name: string;
-  next: boolean;
+	karaoke_id: number;
+	song_name: string;
+	singer_name: string;
+	next: boolean;
 };
 
 type RecordDisplayProps = {
-  selectedRecord: KaraokeRecord | null;
-  isSpinning: boolean;
+	selectedRecord: KaraokeRecord | null;
+	isSpinning: boolean;
 };
 
-export function RecordDisplay({ selectedRecord, isSpinning }: RecordDisplayProps) {
-  // 状態に応じたスタイル選定
-  let containerClasses = "";
-  let glowColor = "";
-  let warpFilter = "";
+export function RecordDisplay({
+	selectedRecord,
+	isSpinning,
+}: RecordDisplayProps) {
+	// 状態に応じたスタイル選定
+	let containerClasses = "";
+	let glowColor = "";
+	let warpFilter = "";
 
-  if (isSpinning) {
-    // 着火操作中 (激しい燃焼)
-    containerClasses = "border-amber-500 animate-flame-intense";
-    glowColor = "bg-[radial-gradient(circle_at_50%_50%,rgba(239,68,68,0.22),transparent_75%)]";
-    warpFilter = "url(#flame-warp-intense)";
-  } else if (selectedRecord) {
-    // 着火成功・楽曲表示中 (穏やかな炎)
-    containerClasses = "border-orange-500/50 animate-flame-flicker";
-    glowColor = "bg-[radial-gradient(circle_at_50%_50%,rgba(249,115,22,0.15),transparent_75%)]";
-    warpFilter = "url(#flame-warp-gentle)";
-  } else {
-    // 未着火・通常時 (静寂のシアン)
-    containerClasses = "border-cyan-500/30 shadow-[0_0_20px_-12px_rgba(6,182,212,0.3)]";
-    glowColor = "bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.12),transparent_70%)]";
-  }
-  
-  // keyframesを使ったアニメーションを定義し、状態に応じてクラスを適用することで、着火中や楽曲表示中の視覚的な変化を表現
-  // SVGのfeTurbulence + feDisplacementMapで外枠自体を炎のように歪ませる（揺らめく輪郭）
-  return (
-    <div className="relative w-full max-w-[280px] sm:max-w-sm aspect-square">
-      {/* SVGフィルター定義（炎の乱流で枠を歪ませる） */}
-      <svg width="0" height="0" className="absolute" aria-hidden="true">
-        <defs>
-          <filter id="flame-warp-gentle" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.012 0.04"
-              numOctaves="2"
-              seed="7"
-              result="noise"
-            >
-              <animate
-                attributeName="baseFrequency"
-                values="0.012 0.04;0.016 0.05;0.010 0.035;0.012 0.04"
-                dur="3.6s"
-                repeatCount="indefinite"
-              />
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-          <filter id="flame-warp-intense" x="-30%" y="-30%" width="160%" height="160%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.02 0.09"
-              numOctaves="3"
-              seed="3"
-              result="noise2"
-            >
-              <animate
-                attributeName="baseFrequency"
-                values="0.02 0.09;0.03 0.12;0.015 0.07;0.02 0.09"
-                dur="0.9s"
-                repeatCount="indefinite"
-              />
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise2" scale="14" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
+	if (isSpinning) {
+		// 着火操作中 (激しい燃焼)
+		containerClasses = "border-amber-500 animate-flame-intense";
+		glowColor =
+			"bg-[radial-gradient(circle_at_50%_50%,rgba(239,68,68,0.22),transparent_75%)]";
+		warpFilter = "url(#flame-warp-intense)";
+	} else if (selectedRecord) {
+		// 着火成功・楽曲表示中 (穏やかな炎)
+		containerClasses = "border-orange-500/50 animate-flame-flicker";
+		glowColor =
+			"bg-[radial-gradient(circle_at_50%_50%,rgba(249,115,22,0.15),transparent_75%)]";
+		warpFilter = "url(#flame-warp-gentle)";
+	} else {
+		// 未着火・通常時 (静寂のシアン)
+		containerClasses =
+			"border-cyan-500/30 shadow-[0_0_20px_-12px_rgba(6,182,212,0.3)]";
+		glowColor =
+			"bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.12),transparent_70%)]";
+	}
 
-      <div
-        style={warpFilter ? { filter: warpFilter } : undefined}
-        className={`
+	// keyframesを使ったアニメーションを定義し、状態に応じてクラスを適用することで、着火中や楽曲表示中の視覚的な変化を表現
+	// SVGのfeTurbulence + feDisplacementMapで外枠自体を炎のように歪ませる（揺らめく輪郭）
+	return (
+		<div className="relative w-full max-w-[280px] sm:max-w-sm aspect-square">
+			{/* SVGフィルター定義（炎の乱流で枠を歪ませる） */}
+			<svg width="0" height="0" className="absolute" aria-hidden="true">
+				<defs>
+					<filter
+						id="flame-warp-gentle"
+						x="-20%"
+						y="-20%"
+						width="140%"
+						height="140%"
+					>
+						<feTurbulence
+							type="fractalNoise"
+							baseFrequency="0.012 0.04"
+							numOctaves="2"
+							seed="7"
+							result="noise"
+						>
+							<animate
+								attributeName="baseFrequency"
+								values="0.012 0.04;0.016 0.05;0.010 0.035;0.012 0.04"
+								dur="3.6s"
+								repeatCount="indefinite"
+							/>
+						</feTurbulence>
+						<feDisplacementMap
+							in="SourceGraphic"
+							in2="noise"
+							scale="6"
+							xChannelSelector="R"
+							yChannelSelector="G"
+						/>
+					</filter>
+					<filter
+						id="flame-warp-intense"
+						x="-30%"
+						y="-30%"
+						width="160%"
+						height="160%"
+					>
+						<feTurbulence
+							type="fractalNoise"
+							baseFrequency="0.02 0.09"
+							numOctaves="3"
+							seed="3"
+							result="noise2"
+						>
+							<animate
+								attributeName="baseFrequency"
+								values="0.02 0.09;0.03 0.12;0.015 0.07;0.02 0.09"
+								dur="0.9s"
+								repeatCount="indefinite"
+							/>
+						</feTurbulence>
+						<feDisplacementMap
+							in="SourceGraphic"
+							in2="noise2"
+							scale="14"
+							xChannelSelector="R"
+							yChannelSelector="G"
+						/>
+					</filter>
+				</defs>
+			</svg>
+
+			<div
+				style={warpFilter ? { filter: warpFilter } : undefined}
+				className={`
           w-full h-full
           bg-[#0f172a]/80 backdrop-blur-md
           rounded-[var(--radius)] border relative
           flex flex-col items-center justify-center p-6 sm:p-8 transition-all duration-500
           ${containerClasses}
         `}
-      >
-        <style>{`
+			>
+				<style>{`
           @keyframes flame-flicker {
             0% {
               box-shadow: 0 0 14px -8px rgba(239, 68, 68, 0.28), 0 0 6px -4px rgba(249, 115, 22, 0.16);
@@ -169,24 +200,29 @@ export function RecordDisplay({ selectedRecord, isSpinning }: RecordDisplayProps
           }
         `}</style>
 
-        {selectedRecord ? (
-          <div className={`text-center px-2 transition-all duration-300 ${isSpinning ? 'blur-md opacity-50' : 'opacity-100'}`}>
-            <p className="text-xs sm:text-sm text-amber-400 font-medium mb-1 sm:mb-2 tracking-widest break-all drop-shadow-[0_0_4px_rgba(245,158,11,0.35)]">
-              {selectedRecord.singer_name}
-            </p>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(239,68,68,0.45)] break-all text-orange-100">
-              {selectedRecord.song_name}
-            </h2>
-          </div>
-        ) : (
-          <p className="text-slate-400 text-center text-sm sm:text-base leading-relaxed">
-            次歌う曲を<br/>
-            <span className="text-cyan-400 font-bold">ボタン1つで着火！</span>
-          </p>
-        )}
+				{selectedRecord ? (
+					<div
+						className={`text-center px-2 transition-all duration-300 ${isSpinning ? "blur-md opacity-50" : "opacity-100"}`}
+					>
+						<p className="text-xs sm:text-sm text-amber-400 font-medium mb-1 sm:mb-2 tracking-widest break-all drop-shadow-[0_0_4px_rgba(245,158,11,0.35)]">
+							{selectedRecord.singer_name}
+						</p>
+						<h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(239,68,68,0.45)] break-all text-orange-100">
+							{selectedRecord.song_name}
+						</h2>
+					</div>
+				) : (
+					<p className="text-slate-400 text-center text-sm sm:text-base leading-relaxed">
+						次歌う曲を
+						<br />
+						<span className="text-cyan-400 font-bold">ボタン1つで着火！</span>
+					</p>
+				)}
 
-        <div className={`absolute top-0 left-0 w-full h-full pointer-events-none transition-all duration-500 rounded-[var(--radius)] opacity-30 ${glowColor}`} />
-      </div>
-    </div>
-  );
+				<div
+					className={`absolute top-0 left-0 w-full h-full pointer-events-none transition-all duration-500 rounded-[var(--radius)] opacity-30 ${glowColor}`}
+				/>
+			</div>
+		</div>
+	);
 }
