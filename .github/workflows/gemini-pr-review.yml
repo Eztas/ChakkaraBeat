@@ -57,7 +57,9 @@ jobs:
         run: |
           # Gemini CLI を呼び出して、プロンプトとソースコード差分を食わせる
           # 実行結果を markdown ファイルに一時保存
-          gemini --model "gemini-3.1-flash-lite" \
+          gemini 
+            --skip-trust \
+            --model "gemini-3.1-flash-lite" \
             --prompt " あなたは優秀なシニアレビュアーです。GEMINI.mdの基準に則りコードを精査してください。
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
