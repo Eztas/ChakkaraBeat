@@ -36,6 +36,11 @@ skillsなしでもいい感じだった
 - MCPをうまく使えていない
 - そもそもjobに警告が出ていてpostがクリーンになっている
 
+## 現状の課題(2026/07/18)
+- Github上の会話でレビューを出せた
+    - GeminiCLIのドキュメント事例がないので、Claude Codeの場合のコードを参考に作成した
+    - prの処理なのでその辺りが共通していると考え対処
+
 ## 参考文献
 [https://github.com/google-github-actions/run-gemini-cli](https://github.com/google-github-actions/run-gemini-cli)
 
