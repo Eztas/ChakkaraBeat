@@ -21,11 +21,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 1. Gemini CLI を実行するための Node.js セットアップ
-      - uses: actions/setup-node@v4
+      # 1. Gemini CLI を実行するための Node.jsとpnpmセットアップ
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: "lts/*"
+          cache: pnpm
 
       # 2. Gemini CLI のグローバルインストール
       - name: Install Gemini CLI
