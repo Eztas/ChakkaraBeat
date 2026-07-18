@@ -83,10 +83,6 @@ jobs:
           gemini \
             --skip-trust \
             --model "gemini-3.1-flash-lite" \
-            --prompt "$(cat full_prompt.txt)" > review_result.md 2>/dev/null || \
-          gemini \
-            --skip-trust \
-            --model "gemini-3.1-flash-lite" \
             < full_prompt.txt > review_result.md
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
