@@ -1,26 +1,86 @@
 name: Gemini PR Review
-
 on:
   pull_request:
-    types: [opened]   # PR作成時と、開いた後の追加プッシュ時に起動
+    types: [opened, synchronize, reopened]
 
-permissions:
-  contents: read
-  pull-requests: write
+concurrency:
+  group: gemini-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-  gemini-review:
+  review:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Run Gemini CLI PR Review # 一旦MCPは使わずこっちで運用する
-        uses: google-github-actions/run-gemini-cli@v0
-        env:
-          GEMINI_CLI_TRUST_WORKSPACE: true
+      - uses: actions/checkout@v6
         with:
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          prompt: '/review'         # workflow から prompt: '/review' に修正
-          gemini_model: 'gemini-3.1-flash-lite' # 軽いモデルに変更
+          fetch-depth: 0
+
+      # 1. Gemini CLI を実行するための Node.js セットアップ
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 2. Gemini CLI のグローバルインストール
+      - name: Install Gemini CLI
+        run: npm install -g @google/gemini-cli
+
+      # 3. PRの差分ファイル名を取得
+      - name: Get changed files
+        id: diff
+        run: |
+          echo "files=$(gh pr diff ${{ github.event.pull_request.number }} --name-only | tr '\n' ',')" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 4. 差分のコード内容を取得して一時ファイルに出力
+      - name: Get diff content
+        id: diff_content
+        run: |
+          gh pr diff ${{ github.event.pull_request.number }} > pr_diff.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. Gemini CLI を使ったレビュー実行
+      - name: Run Gemini Review
+        id: gemini
+        run: |
+          # Gemini CLI を呼び出して、プロンプトとソースコード差分を食わせる
+          # 実行結果を markdown ファイルに一時保存
+          gemini run --model "gemini-3.1-flash-lite" \
+            --system "あなたは優秀なシニアレビュアーです。GEMINI.mdの基準に則りコードを精査してください。" \
+            --prompt "
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+            CHANGED FILES: ${{ steps.diff.outputs.files }}
+
+            以下の変更点（diff）を精査し、レビュー結果を出力してください。
+
+            1. バグ・ランタイムエラーの可能性
+            2. セキュリティ上の懸念（OWASP Top 10）
+            3. パフォーマンス
+
+            【出力ルール】
+            - 指摘がある場合は、対象ファイル名と行番号を明記して markdown 形式で記述してください。
+            - 全体の所感サマリーをまとめてください。
+            - 判定結果を末尾に 'VERDICT: APPROVE|REQUEST_CHANGES|COMMENT' の形式で必ず明記してください。
+
+            ---
+            【変更差分】
+            $(cat pr_diff.txt)
+            " > review_result.md
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      # 6. レビュー結果を GitHub PR コメントに投稿
+      - name: Post review to PR
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body-file review_result.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
