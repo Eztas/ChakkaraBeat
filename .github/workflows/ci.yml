@@ -1,4 +1,4 @@
-name: CI (Formatter, Linter)
+name: CI (Formatter, Linter, Test)
 
 on:
   pull_request:
