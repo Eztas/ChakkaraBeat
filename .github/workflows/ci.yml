@@ -1,4 +1,4 @@
-name: CI (Formatter, Linter)
+name: CI (Formatter, Linter, Test)
 
 on:
   pull_request:
@@ -33,3 +33,7 @@ jobs:
       # Biomeを使ったチェック（linter & format）
       - name: Run Biome Check
         run: pnpm run check
+
+      # Vitestを使ったユニットテスト実行
+      - name: Run Tests
+        run: pnpm test
