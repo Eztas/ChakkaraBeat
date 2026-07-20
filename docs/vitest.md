@@ -2,6 +2,8 @@
 
 テストの待ち時間も減らし、Viteとも相性がいい
 
+小規模プロジェクトなので、機能と同じ箇所にテストファイルを置いてみる
+
 `pnpm add -D vitest jsdom @testing-library/react`
 
 **インストールしたライブラリ**
