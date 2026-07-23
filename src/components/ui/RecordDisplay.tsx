@@ -5,6 +5,7 @@ export type KaraokeRecord = {
 	song_name: string;
 	singer_name: string;
 	next: boolean;
+	youtube_url?: string | null;
 };
 
 type RecordDisplayProps = {
@@ -16,6 +17,16 @@ export function RecordDisplay({
 	selectedRecord,
 	isSpinning,
 }: RecordDisplayProps) {
+	// YouTube IDが11桁であることをチェック
+	const isValidYouTubeId = (id?: string | null) => {
+		return id && id.length === 11;
+	};
+
+	const canLink = isValidYouTubeId(selectedRecord?.youtube_url);
+	const youtubeUrl = canLink
+		? `https://www.youtube.com/watch?v=${selectedRecord?.youtube_url}`
+		: undefined;
+
 	// 状態に応じたスタイル選定
 	let containerClasses = "";
 	let glowColor = "";
@@ -204,12 +215,30 @@ export function RecordDisplay({
 					<div
 						className={`text-center px-2 transition-all duration-300 ${isSpinning ? "blur-md opacity-50" : "opacity-100"}`}
 					>
-						<p className="text-xs sm:text-sm text-amber-400 font-medium mb-1 sm:mb-2 tracking-widest break-all drop-shadow-[0_0_4px_rgba(245,158,11,0.35)]">
-							{selectedRecord.singer_name}
-						</p>
-						<h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(239,68,68,0.45)] break-all text-orange-100">
-							{selectedRecord.song_name}
-						</h2>
+						{canLink ? (
+							<a
+								href={youtubeUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="block group hover:underline decoration-orange-500/50 underline-offset-4"
+							>
+								<p className="text-xs sm:text-sm text-amber-400 font-medium mb-1 sm:mb-2 tracking-widest break-all drop-shadow-[0_0_4px_rgba(245,158,11,0.35)] group-hover:text-amber-200 transition-colors">
+									{selectedRecord.singer_name}
+								</p>
+								<h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(239,68,68,0.45)] break-all text-orange-100 group-hover:text-white transition-colors">
+									{selectedRecord.song_name}
+								</h2>
+							</a>
+						) : (
+							<>
+								<p className="text-xs sm:text-sm text-amber-400 font-medium mb-1 sm:mb-2 tracking-widest break-all drop-shadow-[0_0_4px_rgba(245,158,11,0.35)]">
+									{selectedRecord.singer_name}
+								</p>
+								<h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(239,68,68,0.45)] break-all text-orange-100">
+									{selectedRecord.song_name}
+								</h2>
+							</>
+						)}
 					</div>
 				) : (
 					<p className="text-slate-400 text-center text-sm sm:text-base leading-relaxed">
