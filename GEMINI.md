@@ -36,10 +36,5 @@ chakkarabeat is a karaoke song management and recommendation app.
 
 ## Verification
 
-After making changes, always run:
-
-```bash
-pnpm check
-```
-
-If the command reports errors, fix them before considering the task complete.
+- `pnpm check`: Linter + Formatter
+- `pnpm test`: Test
