@@ -1,5 +1,7 @@
 // src/components/ui/RecordDisplay.tsx
 
+import { setSkip } from "../../lib/skipManager";
+
 export type KaraokeRecord = {
 	karaoke_id: number;
 	song_name: string;
@@ -11,11 +13,13 @@ export type KaraokeRecord = {
 type RecordDisplayProps = {
 	selectedRecord: KaraokeRecord | null;
 	isSpinning: boolean;
+	onSkip?: () => void;
 };
 
 export function RecordDisplay({
 	selectedRecord,
 	isSpinning,
+	onSkip,
 }: RecordDisplayProps) {
 	// YouTube IDが11桁であることをチェック
 	const isValidYouTubeId = (id?: string | null) => {
@@ -239,6 +243,18 @@ export function RecordDisplay({
 								</h2>
 							</>
 						)}
+						<button
+							type="button"
+							onClick={() => {
+								if (selectedRecord) {
+									setSkip(selectedRecord.karaoke_id);
+									if (onSkip) onSkip();
+								}
+							}}
+							className="mt-4 text-xs text-slate-500 hover:text-red-400 transition-colors"
+						>
+							1日だけ除外
+						</button>
 					</div>
 				) : (
 					<p className="text-slate-400 text-center text-sm sm:text-base leading-relaxed">
