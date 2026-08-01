@@ -1,6 +1,6 @@
 // src/components/ui/RecordDisplay.tsx
 
-import { setSkip } from "../../lib/skipManager";
+import { SkipButton } from "./SkipButton";
 
 export type KaraokeRecord = {
 	karaoke_id: number;
@@ -243,18 +243,7 @@ export function RecordDisplay({
 								</h2>
 							</>
 						)}
-						<button
-							type="button"
-							onClick={() => {
-								if (selectedRecord) {
-									setSkip(selectedRecord.karaoke_id);
-									if (onSkip) onSkip();
-								}
-							}}
-							className="mt-4 text-xs text-slate-500 hover:text-red-400 transition-colors"
-						>
-							1日だけ除外
-						</button>
+						<SkipButton karaokeId={selectedRecord.karaoke_id} onSkip={onSkip} />
 					</div>
 				) : (
 					<p className="text-slate-400 text-center text-sm sm:text-base leading-relaxed">
