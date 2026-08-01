@@ -6,8 +6,8 @@
 
 # Next
 フィルターを使った条件に沿った曲の選択機能
-同じ曲が選ばれやすい？
-曲名にURLクリック
+YouTubeURLの後から挿入（カラオケ中に即座に入れにくい）
+~~同じ曲が選ばれやすい？~~
 キャッシュの導入
 Redisの検討
 Gemini CLIのSKILL.md(skillsフォルダは対応していないらしい)
@@ -18,5 +18,4 @@ nextでガチャはnextの調整が大変そうなのでリスト化させたペ
 ドキュメントの作成
 テストコードの作成
 ~~ボタンUIの共通化~~
-~~CI/CDの充実(リンター、フォーマッター、テスト)~~
 [AIによるコード管理](https://zenn.dev/kenimo49/articles/code-review-6-stages-ai-human-boundary)
