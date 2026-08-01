@@ -1,8 +1,8 @@
 // src/components/FilterView.tsx
 import { hc } from "hono/client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { AppType } from "../../worker/index";
-
+import { cleanExpiredSkips, isSkipped } from "../lib/skipManager";
 import AddRecordDrawer from "./AddRecordDrawer";
 import { FlintWheel } from "./ui/FlintWheel";
 import { LighterBody } from "./ui/LighterBody";
@@ -19,7 +19,13 @@ export default function FilterView() {
 	const [isSpinning, setIsSpinning] = useState(false);
 	const [sparks, setSparks] = useState<Spark[]>([]);
 
+	// スキップ除外したリストをメモ化
+	const activeRecords = useMemo(() => {
+		return records.filter((r) => !isSkipped(r.karaoke_id));
+	}, [records]);
+
 	useEffect(() => {
+		cleanExpiredSkips();
 		client.api.karaoke_records
 			.$get()
 			.then((res) => res.json())
@@ -29,7 +35,7 @@ export default function FilterView() {
 	}, []);
 
 	const spinGacha = () => {
-		if (isSpinning || records.length === 0) return;
+		if (isSpinning || activeRecords.length === 0) return;
 		setIsSpinning(true);
 
 		const sparkCount = 45;
@@ -56,7 +62,8 @@ export default function FilterView() {
 		setSparks(newSparks);
 
 		setTimeout(() => {
-			const record = records[Math.floor(Math.random() * records.length)];
+			const record =
+				activeRecords[Math.floor(Math.random() * activeRecords.length)];
 			setSelectedRecord(record);
 			setIsSpinning(false);
 			setSparks([]);
@@ -103,14 +110,20 @@ export default function FilterView() {
 				ChakkaraBeat
 			</h1>
 
-			<RecordDisplay selectedRecord={selectedRecord} isSpinning={isSpinning} />
+			<RecordDisplay
+				selectedRecord={selectedRecord}
+				isSpinning={isSpinning}
+				onSkip={() => {
+					setSelectedRecord(null);
+				}}
+			/>
 
 			<div className="mt-6 sm:mt-12 w-full max-w-[280px] sm:max-w-sm flex items-center justify-center gap-2">
 				<LighterBody />
 				<div className="relative w-3/5 aspect-square">
 					<FlintWheel
 						onClick={spinGacha}
-						disabled={isSpinning || records.length === 0}
+						disabled={isSpinning || activeRecords.length === 0}
 						isSpinning={isSpinning}
 					/>
 					<Sparks isSpinning={isSpinning} sparks={sparks} />

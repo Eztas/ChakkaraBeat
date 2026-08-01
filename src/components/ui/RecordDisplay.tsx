@@ -1,5 +1,7 @@
 // src/components/ui/RecordDisplay.tsx
 
+import { SkipButton } from "./SkipButton";
+
 export type KaraokeRecord = {
 	karaoke_id: number;
 	song_name: string;
@@ -11,11 +13,13 @@ export type KaraokeRecord = {
 type RecordDisplayProps = {
 	selectedRecord: KaraokeRecord | null;
 	isSpinning: boolean;
+	onSkip?: () => void;
 };
 
 export function RecordDisplay({
 	selectedRecord,
 	isSpinning,
+	onSkip,
 }: RecordDisplayProps) {
 	// YouTube IDが11桁であることをチェック
 	const isValidYouTubeId = (id?: string | null) => {
@@ -239,6 +243,7 @@ export function RecordDisplay({
 								</h2>
 							</>
 						)}
+						<SkipButton karaokeId={selectedRecord.karaoke_id} onSkip={onSkip} />
 					</div>
 				) : (
 					<p className="text-slate-400 text-center text-sm sm:text-base leading-relaxed">
