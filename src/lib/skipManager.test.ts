@@ -17,7 +17,7 @@ describe("skipManager", () => {
 		expect(isSkipped(456)).toBe(false);
 	});
 
-	it("should expire after 24 hours (next day 0:00)", () => {
+	it("should expire after 24 hours", () => {
 		const karaokeId = 789;
 
 		// 現在時刻を固定 (例: 2026-07-25 10:00:00)
@@ -27,10 +27,12 @@ describe("skipManager", () => {
 		setSkip(karaokeId);
 		expect(isSkipped(karaokeId)).toBe(true);
 
-		// 翌日 0:00:01 に移動
-		const nextDay = new Date(2026, 6, 26, 0, 0, 1);
-		vi.setSystemTime(nextDay);
+		// 23時間59分59秒経過 (まだ有効)
+		vi.setSystemTime(new Date(now.getTime() + 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000));
+		expect(isSkipped(karaokeId)).toBe(true);
 
+		// 24時間0分0秒経過 (期限切れ)
+		vi.setSystemTime(new Date(now.getTime() + 24 * 60 * 60 * 1000 + 1000));
 		expect(isSkipped(karaokeId)).toBe(false);
 	});
 });

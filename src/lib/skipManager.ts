@@ -13,10 +13,9 @@ export const setSkip = (karaokeId: number) => {
 	const rawData = localStorage.getItem(SKIP_STORAGE_KEY);
 	const skips: SkipMap = rawData ? JSON.parse(rawData) : {};
 
-	// 翌日の0時にスキップ解除
+	// 24時間後にスキップ解除
 	const expiresAt = new Date();
-	expiresAt.setDate(expiresAt.getDate() + 1);
-	expiresAt.setHours(0, 0, 0, 0);
+	expiresAt.setHours(expiresAt.getHours() + 24);
 
 	skips[karaokeId] = { expiresAt: expiresAt.getTime() };
 	localStorage.setItem(SKIP_STORAGE_KEY, JSON.stringify(skips));
