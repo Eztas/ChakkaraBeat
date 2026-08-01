@@ -11,7 +11,12 @@ interface SkipMap {
 
 export const setSkip = (karaokeId: number) => {
 	const rawData = localStorage.getItem(SKIP_STORAGE_KEY);
-	const skips: SkipMap = rawData ? JSON.parse(rawData) : {};
+	let skips: SkipMap = {};
+	try {
+		skips = rawData ? JSON.parse(rawData) : {};
+	} catch (e) {
+		console.error("Failed to parse skip data", e);
+	}
 
 	// 24時間後にスキップ解除
 	const expiresAt = new Date();
@@ -25,19 +30,30 @@ export const isSkipped = (karaokeId: number): boolean => {
 	const rawData = localStorage.getItem(SKIP_STORAGE_KEY);
 	if (!rawData) return false;
 
-	const skips: SkipMap = JSON.parse(rawData);
+	let skips: SkipMap = {};
+	try {
+		skips = JSON.parse(rawData);
+	} catch (e) {
+		console.error("Failed to parse skip data", e);
+		return false;
+	}
 	const skip = skips[karaokeId];
 	if (!skip) return false;
 
 	return Date.now() <= skip.expiresAt;
 };
 
-// 期限切れデータの削除（クリーニング）
 export const cleanExpiredSkips = () => {
 	const rawData = localStorage.getItem(SKIP_STORAGE_KEY);
 	if (!rawData) return;
 
-	const skips: SkipMap = JSON.parse(rawData);
+	let skips: SkipMap = {};
+	try {
+		skips = JSON.parse(rawData);
+	} catch (e) {
+		console.error("Failed to parse skip data", e);
+		return;
+	}
 	let hasChanged = false;
 	const now = Date.now();
 

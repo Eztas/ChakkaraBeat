@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { isSkipped, setSkip } from "./skipManager";
+import { cleanExpiredSkips, isSkipped, setSkip } from "./skipManager";
 
 describe("skipManager", () => {
 	beforeEach(() => {
 		localStorage.clear();
 		vi.useFakeTimers();
+		vi.spyOn(console, "error").mockImplementation(() => {});
 	});
 
 	it("should set and check skip status", () => {
@@ -34,5 +35,21 @@ describe("skipManager", () => {
 		// 24時間0分0秒経過 (期限切れ)
 		vi.setSystemTime(new Date(now.getTime() + 24 * 60 * 60 * 1000 + 1000));
 		expect(isSkipped(karaokeId)).toBe(false);
+	});
+
+	it("should handle invalid JSON gracefully", () => {
+		localStorage.setItem("chakkarabeat_skips", "invalid json");
+
+		// setSkip: クラッシュせず、新しいデータをセットできること
+		expect(() => setSkip(1)).not.toThrow();
+		expect(isSkipped(1)).toBe(true);
+
+		// isSkipped: クラッシュせず false を返すこと
+		localStorage.setItem("chakkarabeat_skips", "invalid json");
+		expect(isSkipped(1)).toBe(false);
+
+		// cleanExpiredSkips: クラッシュしないこと
+		localStorage.setItem("chakkarabeat_skips", "invalid json");
+		expect(() => cleanExpiredSkips()).not.toThrow();
 	});
 });
