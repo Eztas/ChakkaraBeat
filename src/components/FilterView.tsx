@@ -2,7 +2,7 @@
 import { hc } from "hono/client";
 import { useEffect, useMemo, useState } from "react";
 import type { AppType } from "../../worker/index";
-import { isSkipped } from "../lib/skipManager";
+import { cleanExpiredSkips, isSkipped } from "../lib/skipManager";
 import AddRecordDrawer from "./AddRecordDrawer";
 import { FlintWheel } from "./ui/FlintWheel";
 import { LighterBody } from "./ui/LighterBody";
@@ -25,6 +25,7 @@ export default function FilterView() {
 	}, [records]);
 
 	useEffect(() => {
+		cleanExpiredSkips();
 		client.api.karaoke_records
 			.$get()
 			.then((res) => res.json())

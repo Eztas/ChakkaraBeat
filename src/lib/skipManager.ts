@@ -29,11 +29,26 @@ export const isSkipped = (karaokeId: number): boolean => {
 	const skip = skips[karaokeId];
 	if (!skip) return false;
 
-	if (Date.now() > skip.expiresAt) {
-		// 期限切れなら削除してfalseを返す
-		delete skips[karaokeId];
-		localStorage.setItem(SKIP_STORAGE_KEY, JSON.stringify(skips));
-		return false;
+	return Date.now() <= skip.expiresAt;
+};
+
+// 期限切れデータの削除（クリーニング）
+export const cleanExpiredSkips = () => {
+	const rawData = localStorage.getItem(SKIP_STORAGE_KEY);
+	if (!rawData) return;
+
+	const skips: SkipMap = JSON.parse(rawData);
+	let hasChanged = false;
+	const now = Date.now();
+
+	for (const id in skips) {
+		if (now > skips[id].expiresAt) {
+			delete skips[id];
+			hasChanged = true;
+		}
 	}
-	return true;
+
+	if (hasChanged) {
+		localStorage.setItem(SKIP_STORAGE_KEY, JSON.stringify(skips));
+	}
 };
