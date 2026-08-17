@@ -1,6 +1,7 @@
 // src/components/ui/RecordDisplay.tsx
 
 import { SkipButton } from "./SkipButton";
+import { UpdateUrlButton } from "./UpdateUrlButton";
 
 export type KaraokeRecord = {
 	karaoke_id: number;
@@ -241,6 +242,9 @@ export function RecordDisplay({
 								<h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(239,68,68,0.45)] break-all text-orange-100">
 									{selectedRecord.song_name}
 								</h2>
+								<div className="flex gap-2 justify-center">
+									<UpdateUrlButton onClick={() => console.log("着火アクション")} />
+								</div>
 							</>
 						)}
 						<SkipButton karaokeId={selectedRecord.karaoke_id} onSkip={onSkip} />
