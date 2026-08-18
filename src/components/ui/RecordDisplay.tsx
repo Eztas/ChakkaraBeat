@@ -1,7 +1,10 @@
 // src/components/ui/RecordDisplay.tsx
 
+import { useState } from "react";
 import { SkipButton } from "./SkipButton";
 import { UpdateUrlButton } from "./UpdateUrlButton";
+import { IgnitionModal } from "../IgnitionModal";
+import { getAdminToken } from "../../lib/auth";
 
 export type KaraokeRecord = {
 	karaoke_id: number;
@@ -22,10 +25,33 @@ export function RecordDisplay({
 	isSpinning,
 	onSkip,
 }: RecordDisplayProps) {
+    const [isIgnitionOpen, setIsIgnitionOpen] = useState(false);
 	// YouTube IDが11桁であることをチェック
 	const isValidYouTubeId = (id?: string | null) => {
 		return id && id.length === 11;
 	};
+
+    const handleIgnite = async (youtubeId: string) => {
+        if (!selectedRecord) return;
+        
+        const token = getAdminToken();
+
+        const response = await fetch(`/api/songs/${selectedRecord.karaoke_id}/url`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Admin-Token': token || '',
+            },
+            body: JSON.stringify({ youtube_url: youtubeId }),
+        });
+
+        if (response.ok) {
+            alert("着火成功！");
+            window.location.reload(); // 簡易的な更新
+        } else {
+            alert("着火に失敗しました...");
+        }
+    }
 
 	const canLink = isValidYouTubeId(selectedRecord?.youtube_url);
 	const youtubeUrl = canLink
@@ -243,8 +269,13 @@ export function RecordDisplay({
 									{selectedRecord.song_name}
 								</h2>
 								<div className="flex gap-2 justify-center">
-									<UpdateUrlButton onClick={() => console.log("着火アクション")} />
+									<UpdateUrlButton onClick={() => setIsIgnitionOpen(true)} />
 								</div>
+                                <IgnitionModal 
+                                    isOpen={isIgnitionOpen} 
+                                    onClose={() => setIsIgnitionOpen(false)} 
+                                    onIgnite={handleIgnite}
+                                />
 							</>
 						)}
 						<SkipButton karaokeId={selectedRecord.karaoke_id} onSkip={onSkip} />

@@ -1,6 +1,6 @@
 // src/components/ui/SkipButton.tsx
 import { setSkip } from "../../lib/skipManager";
-import { ActionButton } from "./ActionButton";
+import { ActionButton } from "@/components/ui/ActionButton";
 
 type SkipButtonProps = {
 	karaokeId: number;
