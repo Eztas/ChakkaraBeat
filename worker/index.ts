@@ -139,6 +139,27 @@ const routes = app
   const result = await db.select().from(scenes)
   return c.json(result)
 })
+.patch('/api/songs/:id/url', adminAuth, async (c) => {
+  const songId = parseInt(c.req.param('id'))
+  const body = await c.req.json<{ youtube_url: string }>()
+
+  if (!body.youtube_url || body.youtube_url.length !== 11) {
+    return c.json({ error: 'Invalid YouTube ID' }, 400)
+  }
+
+  const db = drizzle(c.env.chakkarabeat_db)
+  const result = await db
+    .update(songs)
+    .set({ youtube_url: body.youtube_url })
+    .where(eq(songs.song_id, songId))
+    .returning()
+
+  if (result.length === 0) {
+    return c.json({ error: 'Song not found' }, 404)
+  }
+
+  return c.json(result[0])
+})
 
 export type AppType = typeof routes // Hono RPC
 export default app
