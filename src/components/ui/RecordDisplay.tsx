@@ -49,10 +49,9 @@ export function RecordDisplay({
 		);
 
 		if (response.ok) {
-			alert("着火成功！");
-			window.location.reload(); // 簡易的な更新
+			alert("更新完了！");
 		} else {
-			alert("着火に失敗しました...");
+			alert("更新失敗");
 		}
 	};
 

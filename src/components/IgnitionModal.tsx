@@ -30,9 +30,7 @@ export function IgnitionModal({
 		<Drawer open={isOpen} onOpenChange={onClose}>
 			<DrawerContent className="bg-slate-900 border-amber-900/50">
 				<DrawerHeader>
-					<DrawerTitle className="text-amber-500">
-						着火準備 (YouTube ID入力)
-					</DrawerTitle>
+					<DrawerTitle className="text-amber-500">YouTube URL</DrawerTitle>
 				</DrawerHeader>
 				<div className="p-4 flex flex-col gap-4">
 					<input
@@ -42,7 +40,7 @@ export function IgnitionModal({
 						placeholder="dQw4w9WgXcQ"
 						className="w-full p-2 bg-slate-800 text-white rounded border border-slate-700"
 					/>
-					<ActionButton onClick={handleSubmit} label="火を灯す" />
+					<ActionButton onClick={handleSubmit} label="URL更新" />
 				</div>
 			</DrawerContent>
 		</Drawer>

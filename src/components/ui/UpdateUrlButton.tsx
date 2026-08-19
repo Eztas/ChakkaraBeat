@@ -6,5 +6,5 @@ type UpdateUrlButtonProps = {
 };
 
 export function UpdateUrlButton({ onClick }: UpdateUrlButtonProps) {
-	return <ActionButton onClick={onClick} label="着火する (URL追加)" />;
+	return <ActionButton onClick={onClick} label="URL更新" />;
 }
