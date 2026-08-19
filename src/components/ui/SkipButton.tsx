@@ -1,6 +1,7 @@
 // src/components/ui/SkipButton.tsx
-import { setSkip } from "../../lib/skipManager";
+
 import { ActionButton } from "@/components/ui/ActionButton";
+import { setSkip } from "../../lib/skipManager";
 
 type SkipButtonProps = {
 	karaokeId: number;
@@ -15,10 +16,5 @@ export function SkipButton({ karaokeId, onSkip }: SkipButtonProps) {
 		}
 	};
 
-	return (
-		<ActionButton 
-            onClick={handleClick} 
-            label="1日だけ除外" 
-        />
-	);
+	return <ActionButton onClick={handleClick} label="1日だけ除外" />;
 }

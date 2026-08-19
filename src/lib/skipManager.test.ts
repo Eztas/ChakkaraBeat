@@ -29,7 +29,11 @@ describe("skipManager", () => {
 		expect(isSkipped(karaokeId)).toBe(true);
 
 		// 23時間59分59秒経過 (まだ有効)
-		vi.setSystemTime(new Date(now.getTime() + 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000));
+		vi.setSystemTime(
+			new Date(
+				now.getTime() + 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000,
+			),
+		);
 		expect(isSkipped(karaokeId)).toBe(true);
 
 		// 24時間0分0秒経過 (期限切れ)
