@@ -140,7 +140,10 @@ const routes = app
   return c.json(result)
 })
 .patch('/api/songs/:id/url', adminAuth, async (c) => {
-  const songId = parseInt(c.req.param('id'))
+  const songId = parseInt(c.req.param('id'), 10)
+  if (isNaN(songId)) {
+    return c.json({ error: 'Invalid ID' }, 400)
+  }
   const body = await c.req.json<{ youtube_url: string }>()
 
   if (!body.youtube_url || body.youtube_url.length !== 11) {
