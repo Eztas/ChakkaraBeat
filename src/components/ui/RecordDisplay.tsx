@@ -1,6 +1,10 @@
 // src/components/ui/RecordDisplay.tsx
 
+import { useState } from "react";
+import { getAdminToken } from "../../lib/auth";
+import { UrlUpdateModal } from "../UrlUpdateModal";
 import { SkipButton } from "./SkipButton";
+import { UpdateUrlButton } from "./UpdateUrlButton";
 
 export type KaraokeRecord = {
 	karaoke_id: number;
@@ -21,9 +25,34 @@ export function RecordDisplay({
 	isSpinning,
 	onSkip,
 }: RecordDisplayProps) {
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	// YouTube IDが11桁であることをチェック
 	const isValidYouTubeId = (id?: string | null) => {
 		return id && id.length === 11;
+	};
+
+	const handleUpdateUrl = async (youtubeId: string) => {
+		if (!selectedRecord) return;
+
+		const token = getAdminToken();
+
+		const response = await fetch(
+			`/api/songs/${selectedRecord.karaoke_id}/url`,
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					"X-Admin-Token": token || "",
+				},
+				body: JSON.stringify({ youtube_url: youtubeId }),
+			},
+		);
+
+		if (response.ok) {
+			alert("更新完了！");
+		} else {
+			alert("更新失敗");
+		}
 	};
 
 	const canLink = isValidYouTubeId(selectedRecord?.youtube_url);
@@ -243,6 +272,14 @@ export function RecordDisplay({
 								</h2>
 							</>
 						)}
+						<div className="flex gap-2 justify-center">
+							<UpdateUrlButton onClick={() => setIsModalOpen(true)} />
+						</div>
+						<UrlUpdateModal
+							isOpen={isModalOpen}
+							onClose={() => setIsModalOpen(false)}
+							onUpdate={handleUpdateUrl}
+						/>
 						<SkipButton karaokeId={selectedRecord.karaoke_id} onSkip={onSkip} />
 					</div>
 				) : (
