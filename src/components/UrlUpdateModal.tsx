@@ -1,24 +1,24 @@
-// src/components/ui/IgnitionModal.tsx
+// src/components/ui/UrlUpdateModal.tsx
 import { useState } from "react";
 import { ActionButton } from "./ui/ActionButton";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "./ui/drawer";
 
-type IgnitionModalProps = {
+type UrlUpdateModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
-	onIgnite: (youtubeId: string) => void;
+	onUpdate: (youtubeId: string) => void;
 };
 
-export function IgnitionModal({
+export function UrlUpdateModal({
 	isOpen,
 	onClose,
-	onIgnite,
-}: IgnitionModalProps) {
+	onUpdate,
+}: UrlUpdateModalProps) {
 	const [youtubeId, setYoutubeId] = useState("");
 
 	const handleSubmit = () => {
 		if (youtubeId.length === 11) {
-			onIgnite(youtubeId);
+			onUpdate(youtubeId);
 			setYoutubeId("");
 			onClose();
 		} else {

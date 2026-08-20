@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { getAdminToken } from "../../lib/auth";
-import { IgnitionModal } from "../IgnitionModal";
+import { UrlUpdateModal } from "../UrlUpdateModal";
 import { SkipButton } from "./SkipButton";
 import { UpdateUrlButton } from "./UpdateUrlButton";
 
@@ -25,13 +25,13 @@ export function RecordDisplay({
 	isSpinning,
 	onSkip,
 }: RecordDisplayProps) {
-	const [isIgnitionOpen, setIsIgnitionOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	// YouTube IDが11桁であることをチェック
 	const isValidYouTubeId = (id?: string | null) => {
 		return id && id.length === 11;
 	};
 
-	const handleIgnite = async (youtubeId: string) => {
+	const handleUpdateUrl = async (youtubeId: string) => {
 		if (!selectedRecord) return;
 
 		const token = getAdminToken();
@@ -273,12 +273,12 @@ export function RecordDisplay({
 							</>
 						)}
 						<div className="flex gap-2 justify-center">
-							<UpdateUrlButton onClick={() => setIsIgnitionOpen(true)} />
+							<UpdateUrlButton onClick={() => setIsModalOpen(true)} />
 						</div>
-						<IgnitionModal
-							isOpen={isIgnitionOpen}
-							onClose={() => setIsIgnitionOpen(false)}
-							onIgnite={handleIgnite}
+						<UrlUpdateModal
+							isOpen={isModalOpen}
+							onClose={() => setIsModalOpen(false)}
+							onUpdate={handleUpdateUrl}
 						/>
 						<SkipButton karaokeId={selectedRecord.karaoke_id} onSkip={onSkip} />
 					</div>
