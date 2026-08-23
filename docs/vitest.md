@@ -20,6 +20,10 @@ import元は@cloudflare/vitest-pool-workers/configではなく@cloudflare/vitest
 
 サイトも全然新しいのが出ないので、claudeに調べてエラー文を教えながら微調整（どのAIも多分一発では正解を出せない）
 
+`import { env } from 'cloudflare:test'`じゃなくて
+
+`import { env } from 'cloudflare:workers'`
+
 ## 参考文献
 
 https://freelance-start.com/articles/1434
