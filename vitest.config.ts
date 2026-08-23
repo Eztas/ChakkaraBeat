@@ -1,7 +1,9 @@
 import path from "path";
 import react from '@vitejs/plugin-react';
-import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
+import { cloudflareTest, readD1Migrations } from "@cloudflare/vitest-pool-workers";
 import { defineConfig } from 'vitest/config';
+
+const migrations = await readD1Migrations(path.join(__dirname, 'migrations'))
 
 export default defineConfig({
   test: {
@@ -32,6 +34,25 @@ export default defineConfig({
         test: {
           name: 'worker',
           include: ['worker/**/*.test.ts'],
+          exclude: ['worker/**/*.integration.test.ts'],
+        },
+      },
+      {
+        // --- Cloudflare Workers 結合テスト ---
+        plugins: [
+          cloudflareTest({
+            wrangler: { configPath: './wrangler.jsonc' },
+            miniflare: {
+              bindings: {
+                TEST_MIGRATIONS: migrations,
+              },
+            },
+          }),
+        ],
+        test: {
+          name: 'worker integration',
+          include: ['worker/**/*.integration.test.ts'],
+          setupFiles: ['./worker/test/apply-migrations.ts'],
         },
       },
     ],
