@@ -42,17 +42,12 @@ export default defineConfig({
         plugins: [
           cloudflareTest({
             wrangler: { configPath: './wrangler.jsonc' },
-            miniflare: {
-              bindings: {
-                TEST_MIGRATIONS: migrations,
-              },
-            },
           }),
         ],
         test: {
           name: 'worker integration',
           include: ['worker/**/*.integration.test.ts'],
-          setupFiles: ['./worker/test/apply_migrations.ts'],
+          setupFiles: ['worker/test/apply_migrations.ts'],
         },
       },
     ],
