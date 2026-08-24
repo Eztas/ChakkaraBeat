@@ -44,6 +44,9 @@ export default defineConfig({
             wrangler: { configPath: './wrangler.jsonc' },
           }),
         ],
+        define: {
+          TEST_MIGRATIONS: migrations,
+        },
         test: {
           name: 'worker integration',
           include: ['worker/**/*.integration.test.ts'],

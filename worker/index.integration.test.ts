@@ -2,11 +2,16 @@
 import { describe, it, expect, beforeAll } from 'vitest'
 import { drizzle } from 'drizzle-orm/d1'
 import { env } from 'cloudflare:workers'
+import { applyD1Migrations, type D1Migration } from 'cloudflare:test'
 import app from './index'
 import * as schema from './db/schema'
 
+declare const TEST_MIGRATIONS: D1Migration[];
+
 describe('GET /api/scenes', () => {
   beforeAll(async () => {
+    await applyD1Migrations(env.chakkarabeat_db, TEST_MIGRATIONS)
+
     // テスト環境のデータベースを取得
     const db = drizzle(env.chakkarabeat_db, { schema })
 
@@ -22,7 +27,7 @@ describe('GET /api/scenes', () => {
       headers: {
         'Content-Type': 'application/json',
       },
-    })
+    }, env)
     
     expect(res.status).toBe(200)
     const data = await res.json()
