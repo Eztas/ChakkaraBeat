@@ -115,3 +115,62 @@ describe('PATCH /api/songs/:id/url', () => {
   })
 })
 
+describe('GET /api/karaoke_records', () => {
+  beforeAll(async () => {
+    await applyD1Migrations(env.chakkarabeat_db, TEST_MIGRATIONS)
+
+    const db = drizzle(env.chakkarabeat_db, { schema })
+
+    // テスト用の曲、シーン、カラオケ記録、関連付けを挿入
+    const [insertedSong] = await db
+      .insert(schema.songs)
+      .values({ song_name: 'テスト曲', singer_name: 'テスト歌手', youtube_url: 'dQw4w9WgXcQ' })
+      .returning()
+
+    const [insertedScene] = await db
+      .insert(schema.scenes)
+      .values({ scene_name: 'ドライブ' })
+      .returning()
+
+    const [insertedRecord] = await db
+      .insert(schema.karaokeRecords)
+      .values({
+        song_id: insertedSong.song_id,
+        user_id: 'user_1',
+        memo: '練習中',
+        next: true,
+      })
+      .returning()
+
+    await db.insert(schema.karaokeScenes).values({
+      karaoke_id: insertedRecord.karaoke_id,
+      scene_id: insertedScene.scene_id,
+    })
+  })
+
+  it('should return full karaoke records with flattened song info and scenes array', async () => {
+    const res = await app.request('/api/karaoke_records', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }, env)
+
+    expect(res.status).toBe(200)
+    const data = await res.json() as any[]
+
+    expect(data).toHaveLength(1)
+    expect(data[0]).toMatchObject({
+      user_id: 'user_1',
+      memo: '練習中',
+      next: true,
+      song_name: 'テスト曲',
+      singer_name: 'テスト歌手',
+      youtube_url: 'dQw4w9WgXcQ',
+      scenes: [
+        expect.objectContaining({ scene_name: 'ドライブ' }),
+      ],
+    })
+    expect(data[0].song).toBeUndefined()
+    expect(data[0].karaokeScenes).toBeUndefined()
+  })
+})
