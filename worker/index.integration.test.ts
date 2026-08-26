@@ -1,6 +1,7 @@
 // worker/index.integration.test.ts
 import { describe, it, expect, beforeAll } from 'vitest'
 import { drizzle } from 'drizzle-orm/d1'
+import { eq, and } from 'drizzle-orm'
 import { env } from 'cloudflare:workers'
 import { applyD1Migrations, type D1Migration } from 'cloudflare:test'
 import app from './index'
@@ -186,4 +187,146 @@ describe('GET /api/karaoke_records', () => {
     expect('karaokeScenes' in record).toBe(false)
   })
 })
+
+describe('POST /api/karaoke_records', () => {
+  beforeAll(async () => {
+    await applyD1Migrations(env.chakkarabeat_db, TEST_MIGRATIONS)
+
+    const db = drizzle(env.chakkarabeat_db, { schema })
+    await db.insert(schema.scenes).values([
+      { scene_id: 10, scene_name: 'パーティー' },
+      { scene_id: 11, scene_name: '夜' },
+    ])
+  })
+
+  it('should return 401 when X-Admin-Token header is missing or invalid', async () => {
+    const res = await app.request(
+      '/api/karaoke_records',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          song_name: '新曲',
+          singer_name: '新歌手',
+          user_id: 'user_post_test',
+        }),
+      },
+      env
+    )
+    expect(res.status).toBe(401)
+  })
+
+  it('should create song, record, and karaoke scenes successfully', async () => {
+    const res = await app.request(
+      '/api/karaoke_records',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Token': env.ADMIN_TOKEN,
+        },
+        body: JSON.stringify({
+          song_name: 'POSTテスト曲',
+          singer_name: 'POSTテスト歌手',
+          youtube_url: 'dQw4w9WgXcQ',
+          user_id: 'user_post_1',
+          scene_ids: [10, 11],
+          memo: '初登録',
+          next: true,
+        }),
+      },
+      env
+    )
+
+    expect(res.status).toBe(201)
+    const data = (await res.json()) as {
+      karaoke_id: number
+      song_id: number
+      user_id: string
+      memo: string | null
+      next: boolean
+    }
+
+    expect(data.user_id).toBe('user_post_1')
+    expect(data.memo).toBe('初登録')
+    expect(data.next).toBe(true)
+
+    // DBの状態を検証
+    const db = drizzle(env.chakkarabeat_db, { schema })
+    const createdRecord = await db.query.karaokeRecords.findFirst({
+      where: eq(schema.karaokeRecords.karaoke_id, data.karaoke_id),
+      with: {
+        song: true,
+        karaokeScenes: true,
+      },
+    })
+
+    expect(createdRecord).toBeDefined()
+    expect(createdRecord?.song.song_name).toBe('POSTテスト曲')
+    expect(createdRecord?.song.singer_name).toBe('POSTテスト歌手')
+    expect(createdRecord?.karaokeScenes).toHaveLength(2)
+  })
+
+  it('should reuse existing song when inserting same song and singer', async () => {
+    const res = await app.request(
+      '/api/karaoke_records',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Token': env.ADMIN_TOKEN,
+        },
+        body: JSON.stringify({
+          song_name: 'POSTテスト曲',
+          singer_name: 'POSTテスト歌手',
+          user_id: 'user_post_2',
+        }),
+      },
+      env
+    )
+
+    expect(res.status).toBe(201)
+    const data = (await res.json()) as { song_id: number; user_id: string }
+    expect(data.user_id).toBe('user_post_2')
+
+    // 曲テーブルの総件数が増えていないことを確認
+    const db = drizzle(env.chakkarabeat_db, { schema })
+    const matchedSongs = await db
+      .select()
+      .from(schema.songs)
+      .where(
+        and(
+          eq(schema.songs.song_name, 'POSTテスト曲'),
+          eq(schema.songs.singer_name, 'POSTテスト歌手')
+        )
+      )
+
+    expect(matchedSongs).toHaveLength(1)
+    expect(data.song_id).toBe(matchedSongs[0].song_id)
+  })
+
+  it('should return 400 when user tries to record the same song twice', async () => {
+    const res = await app.request(
+      '/api/karaoke_records',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Token': env.ADMIN_TOKEN,
+        },
+        body: JSON.stringify({
+          song_name: 'POSTテスト曲',
+          singer_name: 'POSTテスト歌手',
+          user_id: 'user_post_1',
+        }),
+      },
+      env
+    )
+
+    expect(res.status).toBe(400)
+    const data = (await res.json()) as { error: string }
+    expect(data.error).toBe('This song is already in your records.')
+  })
+})
+
 
