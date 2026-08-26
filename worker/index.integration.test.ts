@@ -115,6 +115,17 @@ describe('PATCH /api/songs/:id/url', () => {
   })
 })
 
+type KaraokeRecordResponse = {
+  karaoke_id: number
+  user_id: string
+  memo: string | null
+  next: boolean
+  song_name: string
+  singer_name: string
+  youtube_url: string | null
+  scenes: { scene_id: number; scene_name: string }[]
+}
+
 describe('GET /api/karaoke_records', () => {
   beforeAll(async () => {
     await applyD1Migrations(env.chakkarabeat_db, TEST_MIGRATIONS)
@@ -156,10 +167,11 @@ describe('GET /api/karaoke_records', () => {
     }, env)
 
     expect(res.status).toBe(200)
-    const data = await res.json() as any[]
+    const data = (await res.json()) as KaraokeRecordResponse[]
 
     expect(data).toHaveLength(1)
-    expect(data[0]).toMatchObject({
+    const record = data[0]
+    expect(record).toMatchObject({
       user_id: 'user_1',
       memo: '練習中',
       next: true,
@@ -170,7 +182,8 @@ describe('GET /api/karaoke_records', () => {
         expect.objectContaining({ scene_name: 'ドライブ' }),
       ],
     })
-    expect(data[0].song).toBeUndefined()
-    expect(data[0].karaokeScenes).toBeUndefined()
+    expect('song' in record).toBe(false)
+    expect('karaokeScenes' in record).toBe(false)
   })
 })
+
