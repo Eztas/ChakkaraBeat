@@ -35,5 +35,9 @@ jobs:
         run: pnpm run check
 
       # Vitestを使ったユニットテスト実行
-      - name: Run Tests
+      - name: Run Unit Tests
         run: pnpm test
+
+      # Vitestを使った結合テスト実行
+      - name: Run Integration Tests
+        run: pnpm test:integration
