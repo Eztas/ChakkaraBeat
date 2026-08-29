@@ -41,3 +41,5 @@ jobs:
       # Vitestを使った結合テスト実行
       - name: Run Integration Tests
         run: pnpm test:integration
+        env:
+          ADMIN_TOKEN: "test-admin-token"
