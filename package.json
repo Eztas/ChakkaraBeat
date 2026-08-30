@@ -9,6 +9,7 @@
 		"build": "tsc -b && vite build",
 		"check": "biome check --write",
 		"test": "vitest run --project frontend --project worker",
+		"test:f_integration": "vitest run --project \"frontend_integration\"",
 		"test:integration": "vitest run --project \"worker integration\"",
 		"test:all": "vitest",
 		"preview": "pnpm run build && pnpm wrangler versions upload",

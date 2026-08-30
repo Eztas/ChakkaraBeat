@@ -22,6 +22,23 @@ export default defineConfig({
           globals: true,
           setupFiles: './src/setupTests.ts',
           include: ['src/**/*.test.{ts,tsx}'],
+          exclude: ['src/**/*.integration.test.{ts,tsx}'],
+        },
+      },
+      {
+        // --- 結合フロントエンド (React / jsdom) ---
+        plugins: [react()],
+        resolve: {
+          alias: {
+            "@": path.resolve(__dirname, "./src"),
+          },
+        },
+        test: {
+          name: 'frontend_integration',
+          environment: 'jsdom',
+          globals: true,
+          setupFiles: './src/setupTests.ts',
+          include: ['src/**/*.integration.test.{ts,tsx}'],
         },
       },
       {

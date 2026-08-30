@@ -29,6 +29,7 @@ export function FlintWheel({ onClick, disabled, isSpinning }: FlintWheelProps) {
 	return (
 		<button
 			type="button"
+			aria-label="chakka"
 			onClick={onClick}
 			disabled={disabled}
 			className={`
