@@ -35,5 +35,13 @@ jobs:
         run: pnpm run check
 
       # Vitestを使ったユニットテスト実行
-      - name: Run Tests
+      - name: Run Unit Tests
         run: pnpm test
+
+      # Cloudflare Workersテスト用の.dev.varsを生成(シークレットはprocess.envではなくこちら経由で注入される)
+      - name: Create .dev.vars for integration tests
+        run: echo 'ADMIN_TOKEN="test-admin-token"' > .dev.vars
+
+      # Vitestを使った結合テスト実行
+      - name: Run Integration Tests
+        run: pnpm test:integration

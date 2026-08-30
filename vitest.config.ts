@@ -1,17 +1,57 @@
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
 import path from "path";
+import react from '@vitejs/plugin-react';
+import { cloudflareTest, readD1Migrations } from "@cloudflare/vitest-pool-workers";
+import { defineConfig } from 'vitest/config';
+
+const migrations = await readD1Migrations(path.join(__dirname, 'migrations'))
 
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
   test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: './src/setupTests.ts',
+    projects: [
+      {
+        // --- フロントエンド (React / jsdom) ---
+        plugins: [react()],
+        resolve: {
+          alias: {
+            "@": path.resolve(__dirname, "./src"),
+          },
+        },
+        test: {
+          name: 'frontend',
+          environment: 'jsdom',
+          globals: true,
+          setupFiles: './src/setupTests.ts',
+          include: ['src/**/*.test.{ts,tsx}'],
+        },
+      },
+      {
+        // --- Cloudflare Workers ---
+        plugins: [
+          cloudflareTest({
+            wrangler: { configPath: './wrangler.jsonc' },
+          }),
+        ],
+        test: {
+          name: 'worker',
+          include: ['worker/**/*.test.ts'],
+          exclude: ['worker/**/*.integration.test.ts'],
+        },
+      },
+      {
+        // --- Cloudflare Workers 結合テスト ---
+        plugins: [
+          cloudflareTest({
+            wrangler: { configPath: './wrangler.jsonc' },
+          }),
+        ],
+        define: {
+          TEST_MIGRATIONS: migrations,
+        },
+        test: {
+          name: 'worker integration',
+          include: ['worker/**/*.integration.test.ts'],
+        },
+      },
+    ],
   },
 });
