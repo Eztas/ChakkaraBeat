@@ -18,11 +18,12 @@ export default function FilterView() {
 	);
 	const [isSpinning, setIsSpinning] = useState(false);
 	const [sparks, setSparks] = useState<Spark[]>([]);
+	const [skipVersion, setSkipVersion] = useState(0);
 
-	// スキップ除外したリストをメモ化
+	// スキップ除外したリストをメモ化 (skipVersionの変化でも再計算)
 	const activeRecords = useMemo(() => {
 		return records.filter((r) => !isSkipped(r.karaoke_id));
-	}, [records]);
+	}, [records, skipVersion]);
 
 	useEffect(() => {
 		cleanExpiredSkips();
@@ -115,6 +116,7 @@ export default function FilterView() {
 				isSpinning={isSpinning}
 				onSkip={() => {
 					setSelectedRecord(null);
+					setSkipVersion((v) => v + 1);
 				}}
 			/>
 
