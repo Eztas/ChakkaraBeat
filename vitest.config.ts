@@ -50,7 +50,6 @@ export default defineConfig({
         test: {
           name: 'worker integration',
           include: ['worker/**/*.integration.test.ts'],
-          setupFiles: ['worker/test/apply_migrations.ts'],
         },
       },
     ],
