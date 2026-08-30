@@ -139,8 +139,8 @@ const routes = app
   const result = await db.select().from(scenes)
   return c.json(result)
 })
-.patch('/api/songs/:id/url', adminAuth, async (c) => {
-  const songId = parseInt(c.req.param('id'), 10)
+.patch('/api/songs/:song_id/url', adminAuth, async (c) => {
+  const songId = parseInt(c.req.param('song_id'), 10)
   if (isNaN(songId)) {
     return c.json({ error: 'Invalid ID' }, 400)
   }

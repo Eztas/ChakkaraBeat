@@ -8,6 +8,7 @@ import { UpdateUrlButton } from "./UpdateUrlButton";
 
 export type KaraokeRecord = {
 	karaoke_id: number;
+	song_id: number;
 	song_name: string;
 	singer_name: string;
 	next: boolean;
@@ -37,7 +38,7 @@ export function RecordDisplay({
 		const token = getAdminToken();
 
 		const response = await fetch(
-			`/api/songs/${selectedRecord.karaoke_id}/url`,
+			`/api/songs/${selectedRecord.song_id}/url`,
 			{
 				method: "PATCH",
 				headers: {

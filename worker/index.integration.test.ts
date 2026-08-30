@@ -39,7 +39,7 @@ describe('GET /api/scenes', () => {
   })
 })
 
-describe('PATCH /api/songs/:id/url', () => {
+describe('PATCH /api/songs/:song_id/url', () => {
   beforeAll(async () => {
     await applyD1Migrations(env.chakkarabeat_db, TEST_MIGRATIONS)
 
