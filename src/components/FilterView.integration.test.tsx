@@ -1,5 +1,5 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import FilterView from "./FilterView";
 
 // Hono Clientのモック
@@ -66,7 +66,9 @@ describe("FilterView 結合テスト", () => {
 		expect(skipButton).toBeInTheDocument();
 
 		// 表示されている曲名を取得
-		const firstSelectedSong = screen.getByRole("heading", { level: 2 }).textContent;
+		const firstSelectedSong = screen.getByRole("heading", {
+			level: 2,
+		}).textContent;
 		expect(["曲A", "曲B"]).toContain(firstSelectedSong);
 
 		// 「1日だけ除外」をクリック
@@ -82,10 +84,11 @@ describe("FilterView 結合テスト", () => {
 		});
 
 		// 2回目の抽選結果を取得
-		const secondSelectedSong = screen.getByRole("heading", { level: 2 }).textContent;
+		const secondSelectedSong = screen.getByRole("heading", {
+			level: 2,
+		}).textContent;
 
 		// 1回目にスキップした曲とは異なるもう一方の曲が選ばれていることを検証
 		expect(secondSelectedSong).not.toBe(firstSelectedSong);
 	});
 });
-

@@ -1,29 +1,27 @@
 // src/components/FilterView.tsx
 import { hc } from "hono/client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { AppType } from "../../worker/index";
-import { cleanExpiredSkips, isSkipped } from "../lib/skipManager";
+import { useGacha } from "../hooks/useGacha";
+import { cleanExpiredSkips } from "../lib/skipManager";
 import AddRecordDrawer from "./AddRecordDrawer";
 import { FlintWheel } from "./ui/FlintWheel";
 import { LighterBody } from "./ui/LighterBody";
 import { type KaraokeRecord, RecordDisplay } from "./ui/RecordDisplay";
-import { type Spark, Sparks } from "./ui/Sparks";
+import { Sparks } from "./ui/Sparks";
 
 const client = hc<AppType>("/");
 
 export default function FilterView() {
 	const [records, setRecords] = useState<KaraokeRecord[]>([]);
-	const [selectedRecord, setSelectedRecord] = useState<KaraokeRecord | null>(
-		null,
-	);
-	const [isSpinning, setIsSpinning] = useState(false);
-	const [sparks, setSparks] = useState<Spark[]>([]);
-	const [skipVersion, setSkipVersion] = useState(0);
-
-	// スキップ除外したリストをメモ化 (skipVersionの変化でも再計算)
-	const activeRecords = useMemo(() => {
-		return records.filter((r) => !isSkipped(r.karaoke_id));
-	}, [records, skipVersion]);
+	const {
+		selectedRecord,
+		isSpinning,
+		sparks,
+		activeRecords,
+		spinGacha,
+		notifySkip,
+	} = useGacha(records);
 
 	useEffect(() => {
 		cleanExpiredSkips();
@@ -34,42 +32,6 @@ export default function FilterView() {
 				setRecords(data as KaraokeRecord[]);
 			});
 	}, []);
-
-	const spinGacha = () => {
-		if (isSpinning || activeRecords.length === 0) return;
-		setIsSpinning(true);
-
-		const sparkCount = 45;
-		const newSparks = Array.from({ length: sparkCount }).map((_, i) => {
-			const angle = Math.random() * Math.PI * 2;
-			const velocity = 80 + Math.random() * 140;
-
-			// 左側から右上・上方へ吹き飛ぶように、X方向・Y方向に少しプラスのバイアスを調整
-			const mx = `${Math.cos(angle) * velocity + 40}px`; // 右方向への広がりを強化
-			const my = `${Math.sin(angle) * velocity - 40}px`; // 上方向への勢いを強化
-
-			const colors = ["#ffffff", "#fffbeb", "#fef08a", "#f97316", "#ef4444"];
-			const color = colors[Math.floor(Math.random() * colors.length)];
-
-			return {
-				id: i,
-				mx,
-				my,
-				color,
-				size: 3 + Math.random() * 5,
-				delay: Math.random() * 0.1,
-			};
-		});
-		setSparks(newSparks);
-
-		setTimeout(() => {
-			const record =
-				activeRecords[Math.floor(Math.random() * activeRecords.length)];
-			setSelectedRecord(record);
-			setIsSpinning(false);
-			setSparks([]);
-		}, 400);
-	};
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen h-[100dvh] bg-[#020617] text-white p-4 sm:p-6 overflow-hidden select-none">
@@ -114,10 +76,7 @@ export default function FilterView() {
 			<RecordDisplay
 				selectedRecord={selectedRecord}
 				isSpinning={isSpinning}
-				onSkip={() => {
-					setSelectedRecord(null);
-					setSkipVersion((v) => v + 1);
-				}}
+				onSkip={notifySkip}
 			/>
 
 			<div className="mt-6 sm:mt-12 w-full max-w-[280px] sm:max-w-sm flex items-center justify-center gap-2">
