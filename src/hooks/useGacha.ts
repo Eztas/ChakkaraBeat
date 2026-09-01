@@ -13,6 +13,7 @@ export function useGacha(records: KaraokeRecord[]) {
 	const [skipVersion, setSkipVersion] = useState(0);
 
 	// スキップ除外したリストをメモ化 (skipVersionの変化でも再計算)
+	// biome-ignore lint/correctness/useExhaustiveDependencies: skipVersion is required to trigger re-computation when skips are updated
 	const activeRecords = useMemo(() => {
 		return records.filter((r) => !isSkipped(r.karaoke_id));
 	}, [records, skipVersion]);

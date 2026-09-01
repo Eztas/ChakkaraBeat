@@ -37,17 +37,14 @@ export function RecordDisplay({
 
 		const token = getAdminToken();
 
-		const response = await fetch(
-			`/api/songs/${selectedRecord.song_id}/url`,
-			{
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-					"X-Admin-Token": token || "",
-				},
-				body: JSON.stringify({ youtube_url: youtubeId }),
+		const response = await fetch(`/api/songs/${selectedRecord.song_id}/url`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+				"X-Admin-Token": token || "",
 			},
-		);
+			body: JSON.stringify({ youtube_url: youtubeId }),
+		});
 
 		if (response.ok) {
 			alert("更新完了！");
