@@ -40,7 +40,7 @@ jobs:
 
       # Vitestを使ったフロントエンド結合テスト実行
       - name: Run Frontend Integration Tests
-        run: pnpm test:f_integration
+        run: pnpm test:integration:frontend
 
       # Cloudflare Workersテスト用の.dev.varsを生成(シークレットはprocess.envではなくこちら経由で注入される)
       - name: Create .dev.vars for integration tests
@@ -48,4 +48,4 @@ jobs:
 
       # Vitest + Cloud Workersを使った結合テスト実行
       - name: Run Worker Integration Tests
-        run: pnpm test:integration
+        run: pnpm test:integration:worker
