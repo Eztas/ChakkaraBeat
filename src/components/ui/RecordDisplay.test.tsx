@@ -12,6 +12,7 @@ describe("RecordDisplay", () => {
 	it("楽曲選択時（着火成功）の表示が正しくされること", () => {
 		const record = {
 			karaoke_id: 1,
+			song_id: 10,
 			song_name: "Test Song",
 			singer_name: "Test Singer",
 			next: false,
@@ -24,6 +25,7 @@ describe("RecordDisplay", () => {
 	it("YouTube URLが有効な場合にリンクが表示されること", () => {
 		const record = {
 			karaoke_id: 1,
+			song_id: 10,
 			song_name: "Test Song",
 			singer_name: "Test Singer",
 			next: false,
@@ -39,6 +41,7 @@ describe("RecordDisplay", () => {
 	it("YouTube URLが無効な場合にリンクが表示されないこと", () => {
 		const record = {
 			karaoke_id: 1,
+			song_id: 10,
 			song_name: "Test Song",
 			singer_name: "Test Singer",
 			next: false,
@@ -51,6 +54,7 @@ describe("RecordDisplay", () => {
 	it("回転中（isSpinning: true）の場合、ブラーがかかっていることを確認する（CSSクラスを確認）", () => {
 		const record = {
 			karaoke_id: 1,
+			song_id: 10,
 			song_name: "Test Song",
 			singer_name: "Test Singer",
 			next: false,
